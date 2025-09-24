@@ -1,0 +1,16 @@
+<svg viewBox="0 0 240 234" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="davinciGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="50%" stop-color="#333333"/>
+      <stop offset="100%" stop-color="#cc0000"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="234" rx="42" fill="url(#davinciGrad)"/>
+  <g transform="translate(120,117)">
+    <circle cx="-40" cy="0" r="25" fill="#cc0000"/>
+    <circle cx="40" cy="0" r="25" fill="#cc0000"/>
+    <circle cx="0" cy="-30" r="20" fill="white"/>
+    <text x="0" y="60" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="300">DaVinci Resolve</text>
+  </g>
+</svg>
