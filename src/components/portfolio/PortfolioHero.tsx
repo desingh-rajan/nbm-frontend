@@ -3,7 +3,7 @@ import React from 'react';
 /* Reworked hero: creative studio positioning with category badges */
 export const PortfolioHero: React.FC = () => {
   return (
-    <section data-section id="portfolio-hero" className="relative overflow-hidden min-h-screen flex items-center justify-center pt-16">
+    <section data-section id="portfolio-hero" className="relative overflow-hidden pt-28 pb-32">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,104,55,0.12),rgba(0,77,40,0.85)_70%,rgba(0,77,40,0.95))] dark:bg-[radial-gradient(circle_at_center,#1a2e23_0%,#10231a_70%,#0a0a0a_100%)]" aria-hidden />
       {/* Additional overlay for better text contrast in light mode */}
       <div className="absolute inset-0 bg-black/20 dark:bg-transparent" aria-hidden />
