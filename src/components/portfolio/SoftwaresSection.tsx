@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 
 interface SoftwareItem { name: string; logo: string; }
 const SOFTWARES: SoftwareItem[] = [
@@ -20,7 +19,7 @@ export const SoftwaresSection: React.FC = () => {
             <ul className="flex flex-wrap gap-6 w-full lg:max-w-sm">
               {SOFTWARES.map(s => (
                 <li key={s.name} className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/85 border border-[var(--color-brand-dark)] shadow-sm">
-                  <Image src={s.logo} alt={s.name} width={40} height={40} className="h-10 w-10 rounded-xl" />
+                  <img src={s.logo} alt={s.name} className="h-10 w-10 rounded-xl" />
                   <span className="text-sm font-medium tracking-wide text-[var(--color-brand-dark)]">{s.name}</span>
                 </li>
               ))}
