@@ -27,7 +27,18 @@ export const SiteFooter: React.FC = () => {
         </div>
       </div>
       <div className="border-t border-[var(--color-border)] py-6 text-center text-xs text-[var(--color-text-muted)]">
-        © {YEAR} Never Before Marketing. All rights reserved.
+        <div>© {YEAR} Never Before Marketing. All rights reserved.</div>
+        <div className="mt-2">
+          Built by{' '}
+          <a 
+            href="https://desinghrajan.in" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[var(--color-brand)] hover:text-[var(--color-brand-light)] transition-colors underline"
+          >
+            Desinghrajan
+          </a>
+        </div>
       </div>
     </footer>
   );
