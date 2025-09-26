@@ -51,22 +51,22 @@ export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
           {title}
         </h3>
         {content.description && (
-          <div className={`flex flex-col gap-8 items-start ${showMediaRight || showMediaLeft ? 'md:flex-row' : ''}`}>
+          <div className={`flex flex-col gap-8 items-center ${showMediaRight || showMediaLeft ? 'md:flex-row md:items-start' : ''}`}>
             {/* Media on left (not used currently) */}
             {showMediaLeft && (
-              <div className="order-2 md:order-1 md:basis-1/2 md:shrink-0 md:min-w-0">
+              <div className="w-full md:order-1 md:basis-1/2 md:shrink-0 md:min-w-0">
                 <MediaRow />
               </div>
             )}
 
             {/* Content */}
-            <div className={`order-1 md:order-1 ${showMediaRight || showMediaLeft ? 'md:basis-1/2 md:min-w-0' : ''} max-w-4xl mx-auto text-center`}>
+            <div className={`w-full md:order-1 ${showMediaRight || showMediaLeft ? 'md:basis-1/2 md:min-w-0' : ''} max-w-4xl mx-auto text-center`}>
               <p className="text-lg md:text-xl text-[var(--color-text-muted)] leading-relaxed mb-8">{content.description}</p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 justify-center">
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4">
                 {content.samples.map(sample => (
                   <div
                     key={sample}
-                    className="px-4 py-1.5 rounded-full bg-white/20 dark:bg-[var(--color-brand-dark)]/40 backdrop-blur text-xs md:text-sm tracking-wide text-[var(--color-brand-dark)] dark:text-[var(--color-brand-light)] border border-[var(--color-brand-dark)]/30 dark:border-[var(--color-brand-light)]/40 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] dark:drop-shadow-none text-center"
+                    className="min-w-[140px] px-4 py-2 rounded-full bg-white/20 dark:bg-[var(--color-brand-dark)]/40 backdrop-blur text-xs md:text-sm tracking-wide text-[var(--color-brand-dark)] dark:text-[var(--color-brand-light)] border border-[var(--color-brand-dark)]/30 dark:border-[var(--color-brand-light)]/40 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] dark:drop-shadow-none text-center font-medium flex items-center justify-center"
                   >
                     {sample}
                   </div>
@@ -76,7 +76,7 @@ export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
 
             {/* Media on right for motion graphics */}
             {showMediaRight && (
-              <div className="order-2 md:order-2 md:basis-1/2 md:shrink-0 md:min-w-0">
+              <div className="w-full md:order-2 md:basis-1/2 md:shrink-0 md:min-w-0">
                 <MediaRow />
               </div>
             )}

@@ -15,7 +15,7 @@ export const SoftwaresSection: React.FC = () => {
     <section data-section id="softwares" className="relative">
       <div className="container-shell">
         <div className="rounded-[2.5rem] p-12 md:p-16 bg-[radial-gradient(circle_at_top_left,rgba(0,104,55,0.18),rgba(0,77,40,0.85))] flex flex-col gap-12">
-          <h3 className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide bg-gradient-to-br from-[#009e60] to-[#004d28] dark:from-[#5fffa1] dark:to-[#0d8f4a] bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,64,32,0.18)]">SOFTWARES</h3>
+          <h3 className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide bg-gradient-to-br from-[#009e60] to-[#004d28] dark:from-[#5fffa1] dark:to-[#0d8f4a] bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,64,32,0.18)] text-center">SOFTWARES</h3>
           <div className="flex flex-col lg:flex-row gap-10 items-start">
             <ul className="flex flex-wrap gap-6 w-full lg:max-w-sm">
               {SOFTWARES.map(s => (
