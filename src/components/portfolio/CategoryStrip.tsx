@@ -3,6 +3,18 @@ import React from 'react';
 interface CategoryStripProps { id: string; title: string; }
 
 export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
+  // Reuse the exact same card style as "Our Works" section
+  const cardCls = 'relative overflow-hidden rounded-[2rem] aspect-[9/16] bg-[var(--color-bg-muted)] flex items-center justify-center shadow-card';
+
+  const showMediaRight = id === 'motion-graphics';
+  const showMediaLeft = id === 'animations';
+
+  const MediaColumn: React.FC = () => (
+    <div className="flex flex-col gap-6 w-full">
+      <div className={cardCls}>IMG</div>
+      <div className={cardCls}>IMG</div>
+    </div>
+  );
   const getContent = () => {
     if (id === 'motion-graphics') {
       return {
@@ -44,15 +56,32 @@ export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
           {title}
         </h3>
         {content.description && (
-          <div className="max-w-4xl">
-            <p className="text-lg md:text-xl text-[var(--color-text-muted)] leading-relaxed mb-8">{content.description}</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {content.samples.map(sample => (
-                <div key={sample} className="px-4 py-3 rounded-xl bg-[var(--color-bg-muted)] border border-[var(--color-border)] text-sm font-medium text-[var(--color-brand-dark)] text-center">
-                  {sample}
-                </div>
-              ))}
+          <div className={`grid gap-8 items-start ${showMediaRight || showMediaLeft ? 'md:grid-cols-12' : ''}`}>
+            {/* Media on left for animations */}
+            {showMediaLeft && (
+              <div className="md:col-span-5 order-2 md:order-1">
+                <MediaColumn />
+              </div>
+            )}
+
+            {/* Content */}
+            <div className={`${showMediaRight || showMediaLeft ? 'md:col-span-7' : ''} order-1 md:order-2 max-w-4xl`}> 
+              <p className="text-lg md:text-xl text-[var(--color-text-muted)] leading-relaxed mb-8">{content.description}</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {content.samples.map(sample => (
+                  <div key={sample} className="px-4 py-3 rounded-xl bg-[var(--color-bg-muted)] border border-[var(--color-border)] text-sm font-medium text-[var(--color-brand-dark)] text-center">
+                    {sample}
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Media on right for motion graphics */}
+            {showMediaRight && (
+              <div className="md:col-span-5">
+                <MediaColumn />
+              </div>
+            )}
           </div>
         )}
       </div>
