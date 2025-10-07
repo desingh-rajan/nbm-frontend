@@ -7,7 +7,7 @@ export const SiteFooter: React.FC = () => {
     <footer className="mt-24 border-t border-[var(--color-border)] bg-[var(--color-bg-muted)] dark:bg-[var(--color-surface-alt)]/40">
       <div className="container-shell py-12 flex flex-col gap-12 md:flex-row md:justify-between">
         <div className="flex flex-col gap-4 max-w-sm">
-          <div className="font-semibold text-lg tracking-tight"><span className="text-[var(--color-brand)]">Never Before</span> Marking</div>
+          <div className="font-semibold text-lg tracking-tight"><span className="text-[var(--color-brand)]">Never Before</span> Marketing</div>
           <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">Strategic growth, creative acceleration, and performance systems that unlock compounding brand value.</p>
         </div>
         <div className="grid grid-cols-2 gap-8 text-sm">
@@ -21,8 +21,9 @@ export const SiteFooter: React.FC = () => {
           <div className="flex flex-col gap-2">
             <div className="font-medium mb-1 text-[var(--color-text)]">Connect</div>
             <a href="#cta" className="hover:text-[var(--color-brand)]">Contact</a>
-            <a href="#" className="hover:text-[var(--color-brand)]">LinkedIn</a>
-            <a href="#" className="hover:text-[var(--color-brand)]">Twitter</a>
+            <a href="https://www.instagram.com/nbmdigitalmarketing?igsh=MTNzZnhwYWJjczg4cg==" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-brand)]">Instagram</a>
+            <a href="https://www.linkedin.com/company/never-before-marketing" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-brand)]">LinkedIn</a>
+            <a href="https://www.youtube.com/@NeverBeforeMarketing" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-brand)]">YouTube</a>
           </div>
         </div>
       </div>
