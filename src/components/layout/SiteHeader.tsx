@@ -60,7 +60,7 @@ export const SiteHeader: React.FC = () => {
             className="h-8 w-8 md:h-10 md:w-10 object-contain group-hover:scale-110 transition-transform flex-shrink-0"
           />
           <span className="whitespace-nowrap">
-            <span className="text-[var(--color-brand)]">Never Before</span> <span className="hidden sm:inline">Marketing</span>
+            <span className="text-[var(--color-brand)]">Never Before</span> <span className="text-[var(--color-text)] dark:text-[var(--color-text-invert)]">Marketing</span>
           </span>
         </Link>
 
