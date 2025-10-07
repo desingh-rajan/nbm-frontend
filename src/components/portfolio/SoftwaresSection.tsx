@@ -14,20 +14,20 @@ export const SoftwaresSection: React.FC = () => {
   return (
     <section data-section id="softwares" className="relative">
       <div className="container-shell">
-        <div className="rounded-[2.5rem] p-12 md:p-16 bg-[radial-gradient(circle_at_top_left,rgba(0,104,55,0.18),rgba(0,77,40,0.85))] flex flex-col gap-12">
-          <h3 className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide bg-gradient-to-br from-[#009e60] to-[#004d28] dark:from-[#5fffa1] dark:to-[#0d8f4a] bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,64,32,0.18)] text-center">SOFTWARES</h3>
+        <div className="rounded-[2.5rem] p-12 md:p-16 bg-gradient-overlay flex flex-col gap-12 shadow-card-lg">
+          <h3 className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide text-gradient-brand text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.12)]">SOFTWARES</h3>
           <div className="flex flex-col lg:flex-row gap-10 items-start">
             <ul className="flex flex-wrap gap-6 w-full lg:max-w-sm">
               {SOFTWARES.map(s => (
-                <li key={s.name} className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/85 border border-[var(--color-brand-dark)] shadow-sm">
+                <li key={s.name} className="group flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/90 dark:bg-[var(--color-surface)] border-2 border-[var(--color-brand)] shadow-card hover:shadow-glow-green hover:scale-105 transition-all">
                   <Image src={s.logo} alt={s.name} width={40} height={40} className="h-10 w-10 rounded-xl" />
-                  <span className="text-sm font-medium tracking-wide text-[var(--color-brand-dark)]">{s.name}</span>
+                  <span className="text-sm font-medium tracking-wide text-[var(--color-brand)] group-hover:text-[var(--color-brand-dark)] transition-colors">{s.name}</span>
                 </li>
               ))}
             </ul>
-            <div className="flex-1 grid place-items-center w-full min-h-[260px] rounded-3xl bg-white/10 border border-white/25 backdrop-blur relative overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_70%)]" aria-hidden />
-              <div className="w-full max-w-xl aspect-[16/9] rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-[var(--color-brand)] relative overflow-hidden">
+            <div className="flex-1 grid place-items-center w-full min-h-[260px] rounded-3xl bg-gradient-card border-2 border-[var(--color-brand)]/30 backdrop-blur relative overflow-hidden shadow-card">
+              <div className="absolute inset-0 bg-gradient-glow opacity-20" aria-hidden />
+              <div className="w-full max-w-xl aspect-[16/9] rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-2 border-[var(--color-brand)] relative overflow-hidden shadow-glow-green">
                 {/* Mock timeline interface */}
                 <div className="absolute top-2 left-2 right-2 h-8 bg-slate-700 rounded flex items-center px-3 text-xs text-white font-mono">timeline_project_final_v3.aep</div>
                 <div className="absolute bottom-2 left-2 right-2 h-16 bg-slate-800 rounded p-2">

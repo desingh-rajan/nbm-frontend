@@ -8,7 +8,7 @@ export const PortfolioHero: React.FC = () => {
       id="portfolio-hero"
       className="relative overflow-hidden pt-0 pb-0 md:pt-28 md:pb-32 min-h-[calc(100svh-64px)] md:min-h-0 flex md:block items-center md:items-center justify-center"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,104,55,0.12),rgba(0,77,40,0.85)_70%,rgba(0,77,40,0.95))] dark:bg-[radial-gradient(circle_at_center,#1a2e23_0%,#10231a_70%,#0a0a0a_100%)]" aria-hidden />
+      <div className="absolute inset-0 bg-gradient-overlay" aria-hidden />
       {/* Additional overlay for better text contrast in light mode */}
       <div className="absolute inset-0 bg-black/20 dark:bg-transparent" aria-hidden />
       <div className="absolute inset-0 mix-blend-overlay opacity-40 bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.05)_0,rgba(255,255,255,0.05)_2px,transparent_2px,transparent_6px)] dark:bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.03)_0,rgba(255,255,255,0.03)_2px,transparent_2px,transparent_6px)]" aria-hidden />
@@ -107,9 +107,9 @@ export const PortfolioHero: React.FC = () => {
 
       </div>
       <div className="container-shell relative flex flex-col items-center text-center gap-6 md:gap-10">
-        <div className="flex flex-col gap-3 md:gap-4 items-center max-w-5xl">
+        <div className="flex flex-col gap-3 md:gap-4 items-center max-w-5xl px-4">
           <h1
-            className="font-display leading-[0.95] text-[clamp(3rem,10vw,7.5rem)] bg-gradient-to-br from-[#e6fffa] via-[#a7f3d0] to-[#6ee7b7] dark:from-[#5fffa1] dark:to-[#0d8f4a] bg-clip-text text-transparent drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)] dark:drop-shadow-[0_4px_16px_rgba(0,64,32,0.12)]"
+            className="font-display leading-[1.05] md:leading-[0.95] text-[clamp(2.25rem,8vw,7.5rem)] bg-gradient-to-br from-[#e6fffa] via-[#a7f3d0] to-[#6ee7b7] dark:from-[#5fffa1] dark:to-[#0d8f4a] bg-clip-text text-transparent drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)] dark:drop-shadow-[0_4px_16px_rgba(0,64,32,0.12)]"
           >
             Graphics, Animation & Storytelling that Moves Brands Forward
           </h1>

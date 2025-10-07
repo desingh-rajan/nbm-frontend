@@ -44,9 +44,12 @@ export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
 
   return (
     <section data-section id={id} className="relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 -z-10 bg-gradient-soft opacity-40" aria-hidden />
+
       <div className="container-shell flex flex-col gap-12 items-center text-center">
         <h3
-          className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide bg-gradient-to-br from-[#009e60] to-[#004d28] dark:from-[#5fffa1] dark:to-[#0d8f4a] bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,64,32,0.18)] text-center"
+          className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide text-gradient-brand text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
         >
           {title}
         </h3>
@@ -62,11 +65,11 @@ export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
             {/* Content */}
             <div className={`w-full md:order-1 ${showMediaRight || showMediaLeft ? 'md:basis-1/2 md:min-w-0' : ''} max-w-4xl mx-auto text-center`}>
               <p className="text-lg md:text-xl text-[var(--color-text-muted)] leading-relaxed mb-8">{content.description}</p>
-              <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+              <div className="flex flex-wrap justify-center gap-2 md:gap-4">
                 {content.samples.map(sample => (
                   <div
                     key={sample}
-                    className="min-w-[140px] px-4 py-2 rounded-full bg-white/20 dark:bg-[var(--color-brand-dark)]/40 backdrop-blur text-xs md:text-sm tracking-wide text-[var(--color-brand-dark)] dark:text-[var(--color-brand-light)] border border-[var(--color-brand-dark)]/30 dark:border-[var(--color-brand-light)]/40 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] dark:drop-shadow-none text-center font-medium flex items-center justify-center"
+                    className="px-3 md:px-4 py-2 rounded-full bg-gradient-card backdrop-blur text-xs md:text-sm tracking-wide text-[var(--color-brand)] border-2 border-[var(--color-brand)]/50 shadow-card hover:shadow-glow-green hover:scale-105 transition-all text-center font-medium flex items-center justify-center"
                   >
                     {sample}
                   </div>

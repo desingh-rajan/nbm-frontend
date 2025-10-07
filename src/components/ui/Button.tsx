@@ -19,10 +19,10 @@ const sizeMap: Record<ButtonSize, string> = {
 };
 
 const variantMap: Record<ButtonVariant, string> = {
-  primary: 'bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-dark)] shadow-card',
-  secondary: 'bg-[var(--color-accent)] text-white hover:brightness-95 shadow-card',
-  outline: 'border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-bg-muted)]',
-  ghost: 'text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)]',
+  primary: 'bg-gradient-brand text-white hover:shadow-glow-green shadow-card transition-all duration-300',
+  secondary: 'bg-gradient-accent text-white hover:brightness-95 shadow-card transition-all duration-300',
+  outline: 'border-2 border-[var(--color-brand)] text-[var(--color-text)] hover:bg-gradient-soft transition-all duration-300',
+  ghost: 'text-[var(--color-text-muted)] hover:text-[var(--color-brand)] hover:bg-gradient-soft transition-all duration-300',
 };
 
 export const Button: React.FC<ButtonProps> = ({

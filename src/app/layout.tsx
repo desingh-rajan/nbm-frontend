@@ -39,9 +39,17 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Never Before Marketing – Creative Portfolio",
   description: "Creative digital portfolio showcasing works, motion graphics, animations, values, software stack, and clients.",
+  icons: {
+    icon: [
+      { url: '/nbm-logo.png', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png' }
+    ],
+    apple: '/apple-icon.png',
+  },
   openGraph: {
     title: 'Never Before Marketing – Creative Portfolio',
-    description: 'Creative digital portfolio showcasing works, motion graphics, animations, values, software stack, and clients.'
+    description: 'Creative digital portfolio showcasing works, motion graphics, animations, values, software stack, and clients.',
+    images: ['/nbm-logo.png'],
   }
 };
 

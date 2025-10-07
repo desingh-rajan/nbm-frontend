@@ -4,11 +4,14 @@ const CLIENTS = ['ANU', 'MOKSA', 'SMB', 'ATR', 'THANGAMAYIL', 'BESPOKE', 'RAJMAH
 
 export const ClientsSection: React.FC = () => {
   return (
-    <section data-section id="clients" className="relative">
+    <section data-section id="clients" className="relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 -z-10 bg-gradient-soft opacity-30" aria-hidden />
+
       <div className="container-shell flex flex-col gap-10">
-        <div className="flex flex-wrap justify-center gap-10 opacity-90 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.6),rgba(0,104,55,0.12))] rounded-3xl py-10">
+        <div className="flex flex-wrap justify-center gap-10 bg-gradient-card rounded-3xl py-10 shadow-card border-2 border-[var(--color-brand)]/20">
           {CLIENTS.map(c => (
-            <span key={c} className="text-[var(--color-brand-dark)] font-medium tracking-wide text-sm md:text-base">{c}</span>
+            <span key={c} className="text-[var(--color-brand)] font-bold tracking-wide text-sm md:text-base hover:scale-110 transition-transform">{c}</span>
           ))}
         </div>
       </div>
