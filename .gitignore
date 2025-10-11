@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Kamal secrets
+/.kamal/secrets
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -46,3 +49,4 @@ next-env.d.ts
 /.vscode
 /.git
 /.cache
+DOCKER_CREDENTIALS.md

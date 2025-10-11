@@ -1,0 +1,38 @@
+# Kamal deployment configuration for NBM Frontend
+service: nbm-frontend
+image: desinghrajan/nbm-frontend
+
+# Servers
+servers:
+  web:
+    hosts:
+      - 139.84.158.2
+    labels:
+      traefik.http.routers.nbm-frontend.rule: Host(`nbm.desinghrajan.in`)
+      traefik.http.routers.nbm-frontend.entrypoints: websecure
+      traefik.http.routers.nbm-frontend.tls: true
+      traefik.http.routers.nbm-frontend.tls.certresolver: letsencrypt
+
+# Registry
+registry:
+  username: desinghrajan
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Proxy (Traefik)
+proxy:
+  ssl: true
+  host: nbm.desinghrajan.in
+
+# Environment
+env:
+  clear:
+    NODE_ENV: production
+
+# SSH
+ssh:
+  user: root
+
+# Builder
+builder:
+  arch: amd64
