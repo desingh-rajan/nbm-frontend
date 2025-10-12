@@ -8,7 +8,7 @@ servers:
     hosts:
       - 139.84.158.2
     labels:
-      traefik.http.routers.nbm-frontend.rule: Host(`nbm.desinghrajan.in`)
+      traefik.http.routers.nbm-frontend.rule: Host(`neverbeforemarketing.com`) || Host(`www.neverbeforemarketing.com`)
       traefik.http.routers.nbm-frontend.entrypoints: websecure
       traefik.http.routers.nbm-frontend.tls: true
       traefik.http.routers.nbm-frontend.tls.certresolver: letsencrypt
@@ -19,10 +19,15 @@ registry:
   password:
     - KAMAL_REGISTRY_PASSWORD
 
-# Proxy (Traefik)
+# Proxy
 proxy:
   ssl: true
-  host: nbm.desinghrajan.in
+  host: neverbeforemarketing.com
+  app_port: 3000
+  healthcheck:
+    path: /up
+    timeout: 120
+    interval: 10
 
 # Environment
 env:

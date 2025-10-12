@@ -50,3 +50,7 @@ next-env.d.ts
 /.git
 /.cache
 DOCKER_CREDENTIALS.md
+
+# Kamal deployment files
+/.kamal/*
+!/.kamal/secrets.example
