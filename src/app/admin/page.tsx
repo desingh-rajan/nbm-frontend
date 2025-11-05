@@ -17,7 +17,7 @@ export default function AdminDashboard() {
               Welcome back, {user?.username}! 👋
             </h1>
             <p className="text-[var(--color-text-muted)]">
-              Here's what's happening with your site today.
+              Here&apos;s what&apos;s happening with your site today.
             </p>
           </div>
 

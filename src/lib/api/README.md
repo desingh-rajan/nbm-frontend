@@ -81,6 +81,7 @@ await api.createArticle(title, content);
 ## Base Client
 
 The `ApiClient` class handles:
+
 - ✅ Request/response normalization
 - ✅ Automatic token management
 - ✅ Error handling

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
@@ -33,7 +34,7 @@ export default function LoginPage() {
       } else {
         setError(result.error || 'Login failed');
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -144,12 +145,12 @@ export default function LoginPage() {
 
         {/* Back to Home */}
         <div className="text-center">
-          <a
+          <Link
             href="/"
             className="text-sm text-[var(--color-brand)] hover:text-[var(--color-brand-dark)] transition-colors"
           >
             ← Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

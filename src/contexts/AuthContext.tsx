@@ -98,10 +98,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         error: error instanceof Error ? error.message : 'Login failed'
       };
     }
-  }; const logout = async () => {
+  };
+
+  const logout = async () => {
     try {
       await api.logout();
-    } catch (error) {
+    } catch {
       // Ignore logout errors
     } finally {
       api.clearToken();

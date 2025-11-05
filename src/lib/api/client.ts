@@ -2,6 +2,7 @@
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
@@ -33,6 +34,7 @@ export class ApiClient {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async request<T = any>(
     endpoint: string,
     options: RequestInit = {}
@@ -94,6 +96,7 @@ export class ApiClient {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async authRequest<T = any>(
     endpoint: string,
     options: RequestInit = {}

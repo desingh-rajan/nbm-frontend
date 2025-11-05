@@ -10,7 +10,6 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     loadUsers();

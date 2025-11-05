@@ -9,7 +9,6 @@ export * from './article';
 import { authApi } from './auth';
 import { userApi } from './user';
 import { articleApi } from './article';
-import { client } from './client';
 
 export const api = {
   // Auth
