@@ -42,5 +42,4 @@ ssh:
 builder:
   arch: amd64
   args:
-    NEXT_PUBLIC_API_URL:
-      - NEXT_PUBLIC_API_URL
+    NEXT_PUBLIC_API_URL: https://neverbeforemarketing.com/nbm-be/api
