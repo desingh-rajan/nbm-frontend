@@ -41,3 +41,6 @@ ssh:
 # Builder
 builder:
   arch: amd64
+  args:
+    NEXT_PUBLIC_API_URL:
+      - NEXT_PUBLIC_API_URL
