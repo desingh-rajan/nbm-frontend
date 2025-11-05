@@ -25,65 +25,67 @@
   --palette2-very-dark-teal: #09282d;
   --palette2-red-accent: #e63946;
 
-  /* Active Palette Colors (Default: Palette 1) */
-  --color-brand: #348856; /* Palette 1 Green */
-  --color-brand-dark: #00491d; /* Palette 1 Dark Green */
-  --color-brand-light: #348856; /* Palette 1 Green */
-  --color-accent: #f1faee; /* Palette 1 Off White */
-  --color-neutral: #4d4d4d; /* Palette 1 Dark Gray */
+  /* Active Palette Colors (Default: Palette 2 - Teal - Adjusted for readability) */
+  --color-brand: #68a0a1; /* Palette 2 Turquoise (muted teal) */
+  --color-brand-dark: #09282d; /* Palette 2 Very Dark Teal */
+  --color-brand-light: #7ce6e3; /* Palette 2 Light Cyan (for highlights) */
+  --color-accent: #e63946; /* Palette 2 Red Accent */
+  --color-neutral: #336366; /* Palette 2 Dark Teal */
 
   /* Background & surfaces */
   --color-bg: #ffffff;
-  --color-bg-muted: #f1faee; /* Using palette off-white */
-  --color-bg-invert: #00491d; /* Using dark green */
+  --color-bg-muted: #a8dadc; /* Using palette 2 powder blue */
+  --color-bg-invert: #09282d; /* Using palette 2 very dark teal */
   --color-surface: #ffffff;
-  --color-surface-alt: #348856; /* Using green */
+  --color-surface-alt: #68a0a1; /* Using palette 2 teal */
 
   /* Text */
-  --color-text: #4d4d4d; /* Using dark gray */
-  --color-text-muted: #4d4d4d; /* Using dark gray */
+  --color-text: #09282d; /* Using palette 2 very dark teal */
+  --color-text-muted: #336366; /* Using palette 2 dark teal */
   --color-text-invert: #f1f5f9; /* slate-100 */
 
   /* Utility */
-  --color-border: #e2e8f0; /* slate-200 */
-  --color-success: #348856;
+  --color-border: #a8dadc; /* palette 2 powder blue */
+  --color-success: #68a0a1; /* palette 2 teal */
   --color-danger: #dc2626;
 
   /* ============================================
-     GRADIENT DEFINITIONS - PALETTE 1
+     GRADIENT DEFINITIONS - PALETTE 2 (ACTIVE)
      ============================================ */
   --gradient-brand: linear-gradient(
     135deg,
-    #00491d 0%,
-    #348856 50%,
-    #4d4d4d 100%
+    #09282d 0%,
+    #336366 30%,
+    #68a0a1 60%,
+    #7ce6e3 100%
   );
   --gradient-brand-soft: linear-gradient(
     135deg,
-    rgba(0, 73, 29, 0.1) 0%,
-    rgba(52, 136, 86, 0.2) 50%,
-    rgba(77, 77, 77, 0.1) 100%
+    rgba(9, 40, 45, 0.1) 0%,
+    rgba(51, 99, 102, 0.2) 30%,
+    rgba(104, 160, 161, 0.2) 60%,
+    rgba(124, 230, 227, 0.1) 100%
   );
   --gradient-hero: linear-gradient(
     120deg,
-    #00491d 0%,
-    #348856 40%,
-    #4d4d4d 100%
+    #09282d 0%,
+    #68a0a1 40%,
+    #7ce6e3 100%
   );
   --gradient-card: linear-gradient(
     145deg,
-    rgba(52, 136, 86, 0.05) 0%,
-    rgba(0, 73, 29, 0.15) 100%
+    rgba(124, 230, 227, 0.05) 0%,
+    rgba(51, 99, 102, 0.15) 100%
   );
   --gradient-overlay: linear-gradient(
     180deg,
-    rgba(0, 73, 29, 0.9) 0%,
-    rgba(52, 136, 86, 0.7) 100%
+    rgba(9, 40, 45, 0.9) 0%,
+    rgba(104, 160, 161, 0.7) 100%
   );
-  --gradient-accent: linear-gradient(90deg, #348856 0%, #f1faee 100%);
+  --gradient-accent: linear-gradient(90deg, #e63946 0%, #7ce6e3 100%);
   --gradient-glow: radial-gradient(
     circle at 50% 50%,
-    rgba(52, 136, 86, 0.3),
+    rgba(124, 230, 227, 0.3),
     transparent 70%
   );
 
@@ -135,7 +137,7 @@
   --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08),
     0 2px 4px -2px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.15);
-  --shadow-glow: 0 0 20px rgba(52, 136, 86, 0.3);
+  --shadow-glow: 0 0 20px rgba(124, 230, 227, 0.3);
 
   /* Layout */
   --container-max: 1280px;
@@ -215,28 +217,29 @@
     --color-surface: #1a1a1a;
     --color-surface-alt: #2a2a2a;
     --color-text: #f8fafc;
-    --color-text-muted: #b6c2b8;
+    --color-text-muted: #a8dadc;
     --color-border: #3a3a3a;
-    --color-brand: #348856;
-    --color-brand-dark: #00491d;
-    --color-brand-light: #4d9966;
-    --color-accent: #f1faee;
+    --color-brand: #68a0a1;
+    --color-brand-dark: #09282d;
+    --color-brand-light: #7ce6e3;
+    --color-accent: #e63946;
 
     --gradient-brand: linear-gradient(
       135deg,
-      #00491d 0%,
-      #348856 50%,
-      #4d4d4d 100%
+      #09282d 0%,
+      #336366 30%,
+      #68a0a1 60%,
+      #7ce6e3 100%
     );
     --gradient-hero: linear-gradient(
       120deg,
-      #00491d 0%,
-      #348856 40%,
-      #4d4d4d 100%
+      #09282d 0%,
+      #68a0a1 40%,
+      #7ce6e3 100%
     );
     --gradient-glow: radial-gradient(
       circle at 50% 50%,
-      rgba(52, 136, 86, 0.4),
+      rgba(124, 230, 227, 0.4),
       transparent 70%
     );
   }
