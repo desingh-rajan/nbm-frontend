@@ -2,8 +2,8 @@
 
 import { client } from './client';
 
-const BASE_PATH = '/nbm-be/api/articles';
-const ADMIN_PATH = '/nbm-be/api/admin/articles';
+const BASE_PATH = '/articles';
+const ADMIN_PATH = '/admin/articles';
 
 export interface ArticleUpdateData {
   title?: string;
