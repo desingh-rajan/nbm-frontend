@@ -1,40 +1,71 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { api } from '@/lib/api';
-import type { User } from '@/contexts/AuthContext';
+import { useState } from 'react'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import AdminLayout from '@/components/admin/AdminLayout'
+import { useUsers, useDeleteUser } from '@/hooks'
+import { CreateUserModal } from '@/components/admin/users'
+import type { User } from '@/types'
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const { data, isLoading, error, refetch } = useUsers()
+  const users = ((data as { users?: User[] })?.users || []) as User[]
+  const { mutate: deleteUser } = useDeleteUser()
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
+  const handleCloseModal = () => {
+    setShowCreateModal(false)
+  }
 
-  const loadUsers = async () => {
-    setLoading(true);
-    const response = await api.getUsers();
+  const handleSuccess = () => {
+    handleCloseModal()
+    refetch()
+  }
 
-    // API client now normalizes response structure
-    if (response.data?.users) {
-      setUsers(response.data.users);
-    }
+  const handleDeleteUser = async (userId: string) => {
+    if (!confirm('Are you sure you want to delete this user?')) return
 
-    setLoading(false);
-  }; const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user?')) return;
+    deleteUser(userId, {
+      onSuccess: () => {
+        refetch()
+      },
+      onError: (error) => {
+        alert('Failed to delete user: ' + error.message)
+      },
+    })
+  }
 
-    const response = await api.deleteUser(userId);
-    if (response.error) {
-      alert('Failed to delete user: ' + response.error);
-    } else {
-      loadUsers();
-    }
-  };
+  if (isLoading) {
+    return (
+      <ProtectedRoute requireSuperAdmin>
+        <AdminLayout>
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-brand)]"></div>
+          </div>
+        </AdminLayout>
+      </ProtectedRoute>
+    )
+  }
+
+  if (error) {
+    return (
+      <ProtectedRoute requireSuperAdmin>
+        <AdminLayout>
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="text-6xl mb-4">⚠️</div>
+            <p className="text-xl text-[var(--color-text-muted)] mb-4">Failed to load users</p>
+            <p className="text-[var(--color-text-muted)] mb-6">{error.message}</p>
+            <button
+              onClick={() => refetch()}
+              className="px-6 py-3 bg-[var(--color-brand)] text-white dark:text-[#0a0a0a] rounded-lg hover:bg-[var(--color-brand-dark)] transition-all font-medium"
+            >
+              Retry
+            </button>
+          </div>
+        </AdminLayout>
+      </ProtectedRoute>
+    )
+  }
 
   return (
     <ProtectedRoute requireSuperAdmin>
@@ -61,7 +92,7 @@ export default function UsersPage() {
 
           {/* Users Table */}
           <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg overflow-hidden">
-            {loading ? (
+            {isLoading ? (
               <div className="p-8 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-brand)] mx-auto"></div>
                 <p className="mt-4 text-[var(--color-text-muted)]">Loading users...</p>
@@ -93,7 +124,7 @@ export default function UsersPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[var(--color-border)]">
-                    {users.map((user) => (
+                    {users.map((user: User) => (
                       <tr key={user.id} className="hover:bg-[var(--color-bg)] transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -141,135 +172,8 @@ export default function UsersPage() {
         </div>
 
         {/* Create User Modal */}
-        {showCreateModal && (
-          <CreateUserModal
-            onClose={() => setShowCreateModal(false)}
-            onSuccess={() => {
-              setShowCreateModal(false);
-              loadUsers();
-            }}
-          />
-        )}
+        {showCreateModal && <CreateUserModal onClose={handleCloseModal} onSuccess={handleSuccess} />}
       </AdminLayout>
     </ProtectedRoute>
-  );
-}
-
-function CreateUserModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'admin' | 'user'>('user');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    const response = await api.createUser(email, password, username, role);
-
-    if (response.error) {
-      setError(response.error);
-      setLoading(false);
-    } else {
-      onSuccess();
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[var(--color-card)] rounded-lg max-w-md w-full p-6 border border-[var(--color-border)]">
-        <h2 className="text-2xl font-display font-bold text-[var(--color-text)] mb-4">
-          Create New User
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-              Username
-            </label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="w-full px-4 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg 
-                       text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg 
-                       text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full px-4 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg 
-                       text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-              Role
-            </label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value as 'admin' | 'user')}
-              className="w-full px-4 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg 
-                       text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]"
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2 border border-[var(--color-border)] text-[var(--color-text)] 
-                       rounded-lg hover:bg-[var(--color-bg)] transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 px-4 py-2 bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] 
-                       text-white rounded-lg transition-all disabled:opacity-50"
-            >
-              {loading ? 'Creating...' : 'Create User'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+  )
 }

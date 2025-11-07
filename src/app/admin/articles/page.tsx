@@ -1,47 +1,71 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { api } from '@/lib/api';
-
-interface Article {
-  id: string;
-  title: string;
-  content: string;
-  isPublished: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { useState } from 'react'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import AdminLayout from '@/components/admin/AdminLayout'
+import { useArticles, useDeleteArticle } from '@/hooks'
+import { CreateArticleModal } from '@/components/admin/articles'
+import type { Article } from '@/types'
 
 export default function ArticlesPage() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const { data, isLoading, error, refetch } = useArticles()
+  const articles = ((data as { articles?: Article[] })?.articles || []) as Article[]
+  const { mutate: deleteArticle } = useDeleteArticle()
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
-  useEffect(() => {
-    loadArticles();
-  }, []);
+  const handleCloseModal = () => {
+    setShowCreateModal(false)
+  }
 
-  const loadArticles = async () => {
-    setLoading(true);
-    const response = await api.getArticles();
-    if (response.data && Array.isArray(response.data)) {
-      setArticles(response.data);
-    }
-    setLoading(false);
-  };
+  const handleSuccess = () => {
+    handleCloseModal()
+    refetch()
+  }
 
   const handleDeleteArticle = async (articleId: string) => {
-    if (!confirm('Are you sure you want to delete this article?')) return;
+    if (!confirm('Are you sure you want to delete this article?')) return
 
-    const response = await api.deleteArticle(articleId);
-    if (response.error) {
-      alert('Failed to delete article: ' + response.error);
-    } else {
-      loadArticles();
-    }
-  };
+    deleteArticle(articleId, {
+      onSuccess: () => {
+        refetch()
+      },
+      onError: (error) => {
+        alert('Failed to delete article: ' + error.message)
+      },
+    })
+  }
+
+  if (isLoading) {
+    return (
+      <ProtectedRoute>
+        <AdminLayout>
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-brand)]"></div>
+          </div>
+        </AdminLayout>
+      </ProtectedRoute>
+    )
+  }
+
+  if (error) {
+    return (
+      <ProtectedRoute>
+        <AdminLayout>
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="text-6xl mb-4">⚠️</div>
+            <p className="text-xl text-[var(--color-text-muted)] mb-4">Failed to load articles</p>
+            <p className="text-[var(--color-text-muted)] mb-6">{error.message}</p>
+            <button
+              onClick={() => refetch()}
+              className="px-6 py-3 bg-[var(--color-brand)] text-white dark:text-[#0a0a0a] rounded-lg hover:bg-[var(--color-brand-dark)] transition-all font-medium"
+            >
+              Retry
+            </button>
+          </div>
+        </AdminLayout>
+      </ProtectedRoute>
+    )
+  }
 
   return (
     <ProtectedRoute>
@@ -68,7 +92,7 @@ export default function ArticlesPage() {
 
           {/* Articles List */}
           <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg overflow-hidden">
-            {loading ? (
+            {isLoading ? (
               <div className="p-8 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-brand)] mx-auto"></div>
                 <p className="mt-4 text-[var(--color-text-muted)]">Loading articles...</p>
@@ -97,7 +121,7 @@ export default function ArticlesPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[var(--color-border)]">
-                    {articles.map((article) => (
+                    {articles.map((article: Article) => (
                       <tr key={article.id} className="hover:bg-[var(--color-bg)] transition-colors">
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-[var(--color-text)]">
@@ -135,118 +159,8 @@ export default function ArticlesPage() {
         </div>
 
         {/* Create Article Modal */}
-        {showCreateModal && (
-          <CreateArticleModal
-            onClose={() => setShowCreateModal(false)}
-            onSuccess={() => {
-              setShowCreateModal(false);
-              loadArticles();
-            }}
-          />
-        )}
+        {showCreateModal && <CreateArticleModal onClose={handleCloseModal} onSuccess={handleSuccess} />}
       </AdminLayout>
     </ProtectedRoute>
-  );
-}
-
-function CreateArticleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [published, setPublished] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    const response = await api.createArticle(title, content, published);
-
-    if (response.error) {
-      setError(response.error);
-      setLoading(false);
-    } else {
-      onSuccess();
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[var(--color-card)] rounded-lg max-w-2xl w-full p-6 border border-[var(--color-border)] max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-display font-bold text-[var(--color-text)] mb-4">
-          Create New Article
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-              Title
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              className="w-full px-4 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg 
-                       text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-2">
-              Content
-            </label>
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              required
-              rows={10}
-              className="w-full px-4 py-2 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg 
-                       text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]"
-            />
-          </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="published"
-              checked={published}
-              onChange={(e) => setPublished(e.target.checked)}
-              className="w-4 h-4 text-[var(--color-brand)] bg-[var(--color-bg)] border-[var(--color-border)] rounded 
-                       focus:ring-2 focus:ring-[var(--color-brand)]"
-            />
-            <label htmlFor="published" className="ml-2 text-sm text-[var(--color-text)]">
-              Publish immediately
-            </label>
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2 border border-[var(--color-border)] text-[var(--color-text)] 
-                       rounded-lg hover:bg-[var(--color-bg)] transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 px-4 py-2 bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] 
-                       text-white rounded-lg transition-all disabled:opacity-50"
-            >
-              {loading ? 'Creating...' : 'Create Article'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+  )
 }

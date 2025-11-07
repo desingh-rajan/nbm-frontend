@@ -1,45 +1,36 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useAuth } from '@/hooks'
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { login, user } = useAuth();
+  const router = useRouter()
+  const { loginAsync, user, isLoggingIn } = useAuth()
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      router.push('/admin');
+      router.push('/admin')
     }
-  }, [user, router]);
+  }, [user, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+    e.preventDefault()
+    setError('')
 
     try {
-      const result = await login(email, password);
-
-      if (result.success) {
-        router.push('/admin');
-      } else {
-        setError(result.error || 'Login failed');
-      }
-    } catch {
-      setError('An unexpected error occurred');
-    } finally {
-      setLoading(false);
+      await loginAsync({ email, password })
+      router.push('/admin')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed')
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--color-bg)] to-[var(--color-bg-secondary)] px-4">
@@ -78,7 +69,7 @@ export default function LoginPage() {
                          focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent
                          transition-all"
                 placeholder="admin@example.com"
-                disabled={loading}
+                disabled={isLoggingIn}
               />
             </div>
 
@@ -97,19 +88,19 @@ export default function LoginPage() {
                          focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent
                          transition-all"
                 placeholder="••••••••"
-                disabled={loading}
+                disabled={isLoggingIn}
               />
             </div>
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={isLoggingIn}
               className="w-full py-3 px-4 bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] 
                        text-white font-medium rounded-lg transition-all duration-200
                        focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:ring-offset-2
                        disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (
+              {isLoggingIn ? (
                 <span className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import ThemeToggle from '@/components/ui/ThemeToggle';
+import { useAuth } from '@/hooks'
+import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout, isSuperAdmin } = useAuth();
+  const { user, logout, isSuperAdmin } = useAuth()
   const router = useRouter();
   const pathname = usePathname();
 

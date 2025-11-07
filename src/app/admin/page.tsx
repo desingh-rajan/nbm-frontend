@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { useAuth } from '@/contexts/AuthContext';
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import AdminLayout from '@/components/admin/AdminLayout'
+import { useAuth } from '@/hooks'
 
 export default function AdminDashboard() {
-  const { user, isSuperAdmin } = useAuth();
+  const { user, isSuperAdmin } = useAuth()
 
   return (
     <ProtectedRoute>

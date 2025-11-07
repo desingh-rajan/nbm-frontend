@@ -1,29 +1,29 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks'
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
-  requireSuperAdmin?: boolean;
+  children: React.ReactNode
+  requireSuperAdmin?: boolean
 }
 
 export default function ProtectedRoute({ children, requireSuperAdmin = false }: ProtectedRouteProps) {
-  const router = useRouter();
-  const { user, loading, isSuperAdmin } = useAuth();
+  const router = useRouter()
+  const { user, isLoading, isSuperAdmin } = useAuth()
 
   useEffect(() => {
-    if (!loading) {
+    if (!isLoading) {
       if (!user) {
-        router.push('/login');
+        router.push('/login')
       } else if (requireSuperAdmin && !isSuperAdmin) {
-        router.push('/admin');
+        router.push('/admin')
       }
     }
-  }, [user, loading, requireSuperAdmin, isSuperAdmin, router]);
+  }, [user, isLoading, requireSuperAdmin, isSuperAdmin, router])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)]">
         <div className="text-center">
@@ -31,11 +31,11 @@ export default function ProtectedRoute({ children, requireSuperAdmin = false }: 
           <p className="mt-4 text-[var(--color-text-muted)]">Loading...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (!user) {
-    return null;
+    return null
   }
 
   if (requireSuperAdmin && !isSuperAdmin) {
@@ -46,8 +46,8 @@ export default function ProtectedRoute({ children, requireSuperAdmin = false }: 
           <p className="text-[var(--color-text-muted)]">You don&apos;t have permission to access this page.</p>
         </div>
       </div>
-    );
+    )
   }
 
-  return <>{children}</>;
+  return <>{children}</>
 }

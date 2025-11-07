@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Oswald, Poppins, Playfair_Display, Inter } from 'next/font/google';
-import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { QueryProvider } from '@/providers/QueryProvider';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -86,11 +86,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${poppins.variable} ${playfair.variable} ${inter.variable} antialiased bg-[var(--color-bg)] text-[var(--color-text)]`}
       >
-        <ThemeProvider>
-          <AuthProvider>
+        <QueryProvider>
+          <ThemeProvider>
             {children}
-          </AuthProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
