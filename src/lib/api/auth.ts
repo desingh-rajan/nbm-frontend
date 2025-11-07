@@ -2,7 +2,7 @@
 
 import { client } from './client';
 
-const BASE_PATH = '/nbm-be/api/auth';
+const BASE_PATH = '/auth';
 
 export const authApi = {
   /**
