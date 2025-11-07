@@ -4,11 +4,13 @@ export * from './client';
 export * from './auth';
 export * from './user';
 export * from './article';
+export * from './siteSetting';
 
 // Re-export for backward compatibility with old code
 import { authApi } from './auth';
 import { userApi } from './user';
 import { articleApi } from './article';
+import { siteSettingApi } from './siteSetting';
 
 export const api = {
   // Auth
@@ -34,4 +36,11 @@ export const api = {
   createArticle: articleApi.create,
   updateArticle: articleApi.update,
   deleteArticle: articleApi.delete,
+
+  // Site Settings
+  getSiteSettings: siteSettingApi.getAll,
+  getSiteSetting: siteSettingApi.getByIdOrKey,
+  createSiteSetting: siteSettingApi.create,
+  updateSiteSetting: siteSettingApi.update,
+  deleteSiteSetting: siteSettingApi.delete,
 };

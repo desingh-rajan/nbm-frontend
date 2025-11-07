@@ -16,112 +16,112 @@
   --palette1-off-white: #f1faee;
 
   /* ============================================
-     COLOR PALETTE 2: Teal/Cyan Theme
+     COLOR PALETTE 2: Teal/Cyan Theme (Vibrant)
      ============================================ */
-  --palette2-light-cyan: #7ce6e3;
-  --palette2-teal: #68a0a1;
-  --palette2-powder-blue: #a8dadc;
-  --palette2-dark-teal: #336366;
-  --palette2-very-dark-teal: #09282d;
+  --palette2-light-cyan: #00d4d0;
+  --palette2-teal: #14b8a6;
+  --palette2-powder-blue: #5eead4;
+  --palette2-dark-teal: #0f766e;
+  --palette2-very-dark-teal: #134e4a;
   --palette2-red-accent: #e63946;
 
-  /* Active Palette Colors (Default: Palette 2 - Teal - Adjusted for readability) */
-  --color-brand: #68a0a1; /* Palette 2 Turquoise (muted teal) */
-  --color-brand-dark: #09282d; /* Palette 2 Very Dark Teal */
-  --color-brand-light: #7ce6e3; /* Palette 2 Light Cyan (for highlights) */
+  /* Active Palette Colors (Default: Palette 2 - Teal - Vibrant) */
+  --color-brand: #14b8a6; /* Vibrant teal */
+  --color-brand-dark: #0f766e; /* Rich dark teal */
+  --color-brand-light: #5eead4; /* Bright cyan */
   --color-accent: #e63946; /* Palette 2 Red Accent */
-  --color-neutral: #336366; /* Palette 2 Dark Teal */
+  --color-neutral: #0d9488; /* Medium teal */
 
   /* Background & surfaces */
   --color-bg: #ffffff;
-  --color-bg-muted: #a8dadc; /* Using palette 2 powder blue */
-  --color-bg-invert: #09282d; /* Using palette 2 very dark teal */
+  --color-bg-muted: #f0fdfa; /* Very light teal tint */
+  --color-bg-invert: #134e4a; /* Dark teal */
   --color-surface: #ffffff;
-  --color-surface-alt: #68a0a1; /* Using palette 2 teal */
+  --color-surface-alt: #14b8a6; /* Vibrant teal */
 
   /* Text */
-  --color-text: #09282d; /* Using palette 2 very dark teal */
-  --color-text-muted: #336366; /* Using palette 2 dark teal */
+  --color-text: #134e4a; /* Dark teal */
+  --color-text-muted: #0f766e; /* Medium dark teal */
   --color-text-invert: #f1f5f9; /* slate-100 */
 
   /* Utility */
-  --color-border: #a8dadc; /* palette 2 powder blue */
-  --color-success: #68a0a1; /* palette 2 teal */
+  --color-border: #ccfbf1; /* Light teal border */
+  --color-success: #14b8a6; /* Vibrant teal */
   --color-danger: #dc2626;
 
   /* ============================================
-     GRADIENT DEFINITIONS - PALETTE 2 (ACTIVE)
+     GRADIENT DEFINITIONS - PALETTE 2 (ACTIVE) - Vibrant
      ============================================ */
   --gradient-brand: linear-gradient(
     135deg,
-    #09282d 0%,
-    #336366 30%,
-    #68a0a1 60%,
-    #7ce6e3 100%
+    #134e4a 0%,
+    #0d9488 30%,
+    #14b8a6 60%,
+    #5eead4 100%
   );
   --gradient-brand-soft: linear-gradient(
     135deg,
-    rgba(9, 40, 45, 0.1) 0%,
-    rgba(51, 99, 102, 0.2) 30%,
-    rgba(104, 160, 161, 0.2) 60%,
-    rgba(124, 230, 227, 0.1) 100%
+    rgba(19, 78, 74, 0.1) 0%,
+    rgba(13, 148, 136, 0.15) 30%,
+    rgba(20, 184, 166, 0.2) 60%,
+    rgba(94, 234, 212, 0.1) 100%
   );
   --gradient-hero: linear-gradient(
     120deg,
-    #09282d 0%,
-    #68a0a1 40%,
-    #7ce6e3 100%
+    #134e4a 0%,
+    #14b8a6 40%,
+    #5eead4 100%
   );
   --gradient-card: linear-gradient(
     145deg,
-    rgba(124, 230, 227, 0.05) 0%,
-    rgba(51, 99, 102, 0.15) 100%
+    rgba(94, 234, 212, 0.08) 0%,
+    rgba(20, 184, 166, 0.12) 100%
   );
   --gradient-overlay: linear-gradient(
     180deg,
-    rgba(9, 40, 45, 0.9) 0%,
-    rgba(104, 160, 161, 0.7) 100%
+    rgba(19, 78, 74, 0.9) 0%,
+    rgba(20, 184, 166, 0.7) 100%
   );
-  --gradient-accent: linear-gradient(90deg, #e63946 0%, #7ce6e3 100%);
+  --gradient-accent: linear-gradient(90deg, #e63946 0%, #5eead4 100%);
   --gradient-glow: radial-gradient(
     circle at 50% 50%,
-    rgba(124, 230, 227, 0.3),
+    rgba(94, 234, 212, 0.4),
     transparent 70%
   );
 
   /* ============================================
-     GRADIENT DEFINITIONS - PALETTE 2
+     GRADIENT DEFINITIONS - PALETTE 2 - Vibrant
      ============================================ */
   --gradient-teal: linear-gradient(
     135deg,
-    #09282d 0%,
-    #336366 30%,
-    #68a0a1 60%,
-    #7ce6e3 100%
+    #134e4a 0%,
+    #0d9488 30%,
+    #14b8a6 60%,
+    #5eead4 100%
   );
   --gradient-teal-soft: linear-gradient(
     135deg,
-    rgba(9, 40, 45, 0.1) 0%,
-    rgba(51, 99, 102, 0.2) 30%,
-    rgba(104, 160, 161, 0.2) 60%,
-    rgba(124, 230, 227, 0.1) 100%
+    rgba(19, 78, 74, 0.1) 0%,
+    rgba(13, 148, 136, 0.15) 30%,
+    rgba(20, 184, 166, 0.2) 60%,
+    rgba(94, 234, 212, 0.1) 100%
   );
   --gradient-cyan: linear-gradient(
     120deg,
-    #a8dadc 0%,
-    #7ce6e3 50%,
-    #68a0a1 100%
+    #5eead4 0%,
+    #2dd4bf 50%,
+    #14b8a6 100%
   );
   --gradient-ocean: linear-gradient(
     145deg,
-    #09282d 0%,
-    #336366 50%,
-    #a8dadc 100%
+    #134e4a 0%,
+    #0d9488 50%,
+    #5eead4 100%
   );
-  --gradient-accent-red: linear-gradient(90deg, #e63946 0%, #336366 100%);
+  --gradient-accent-red: linear-gradient(90deg, #e63946 0%, #0d9488 100%);
   --gradient-teal-glow: radial-gradient(
     circle at 50% 50%,
-    rgba(124, 230, 227, 0.3),
+    rgba(94, 234, 212, 0.4),
     transparent 70%
   );
 
@@ -137,7 +137,7 @@
   --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08),
     0 2px 4px -2px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.15);
-  --shadow-glow: 0 0 20px rgba(124, 230, 227, 0.3);
+  --shadow-glow: 0 0 24px rgba(94, 234, 212, 0.4);
 
   /* Layout */
   --container-max: 1280px;
@@ -146,38 +146,38 @@
 }
 
 /* ============================================
-   PALETTE 2 THEME CLASS
+   PALETTE 2 THEME CLASS - Vibrant
    ============================================ */
 .theme-palette-2 {
-  --color-brand: #7ce6e3;
-  --color-brand-dark: #09282d;
-  --color-brand-light: #a8dadc;
+  --color-brand: #14b8a6;
+  --color-brand-dark: #0f766e;
+  --color-brand-light: #5eead4;
   --color-accent: #e63946;
-  --color-neutral: #336366;
+  --color-neutral: #0d9488;
 
   --color-bg: #ffffff;
-  --color-bg-muted: #a8dadc;
-  --color-bg-invert: #09282d;
+  --color-bg-muted: #f0fdfa;
+  --color-bg-invert: #134e4a;
   --color-surface: #ffffff;
-  --color-surface-alt: #68a0a1;
+  --color-surface-alt: #14b8a6;
 
-  --color-text: #09282d;
-  --color-text-muted: #336366;
+  --color-text: #134e4a;
+  --color-text-muted: #0f766e;
 
-  --color-border: #a8dadc;
-  --color-success: #68a0a1;
+  --color-border: #ccfbf1;
+  --color-success: #14b8a6;
 
   --gradient-brand: linear-gradient(
     135deg,
-    #09282d 0%,
-    #336366 30%,
-    #68a0a1 60%,
-    #7ce6e3 100%
+    #134e4a 0%,
+    #0d9488 30%,
+    #14b8a6 60%,
+    #5eead4 100%
   );
   --gradient-brand-soft: linear-gradient(
     135deg,
-    rgba(9, 40, 45, 0.1) 0%,
-    rgba(51, 99, 102, 0.2) 30%,
+    rgba(19, 78, 74, 0.1) 0%,
+    rgba(13, 148, 136, 0.15) 30%,
     rgba(104, 160, 161, 0.2) 60%,
     rgba(124, 230, 227, 0.1) 100%
   );
@@ -208,6 +208,7 @@
 
 /* Removed experimental @theme block; using CSS vars directly */
 
+/* System dark mode preference */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -217,58 +218,144 @@
     --color-surface: #1a1a1a;
     --color-surface-alt: #2a2a2a;
     --color-text: #f8fafc;
-    --color-text-muted: #a8dadc;
-    --color-border: #3a3a3a;
-    --color-brand: #68a0a1;
-    --color-brand-dark: #09282d;
-    --color-brand-light: #7ce6e3;
+    --color-text-muted: #99f6e4;
+    --color-border: #2d3d3d;
+    --color-brand: #2dd4bf;
+    --color-brand-dark: #0f766e;
+    --color-brand-light: #5eead4;
     --color-accent: #e63946;
 
     --gradient-brand: linear-gradient(
       135deg,
-      #09282d 0%,
-      #336366 30%,
-      #68a0a1 60%,
-      #7ce6e3 100%
+      #134e4a 0%,
+      #0d9488 30%,
+      #14b8a6 60%,
+      #5eead4 100%
     );
     --gradient-hero: linear-gradient(
       120deg,
-      #09282d 0%,
-      #68a0a1 40%,
-      #7ce6e3 100%
+      #134e4a 0%,
+      #14b8a6 40%,
+      #5eead4 100%
     );
     --gradient-glow: radial-gradient(
       circle at 50% 50%,
-      rgba(124, 230, 227, 0.4),
+      rgba(94, 234, 212, 0.5),
       transparent 70%
     );
   }
+}
 
-  .theme-palette-2 {
-    --color-brand: #7ce6e3;
-    --color-brand-dark: #09282d;
-    --color-brand-light: #a8dadc;
-    --color-accent: #e63946;
+/* Dark mode with .dark class (for toggle) */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --color-bg: #0a0a0a;
+  --color-bg-muted: #1a1a1a;
+  --color-surface: #1a1a1a;
+  --color-surface-alt: #2a2a2a;
+  --color-text: #f8fafc;
+  --color-text-muted: #99f6e4;
+  --color-border: #2d3d3d;
+  --color-brand: #2dd4bf;
+  --color-brand-dark: #0f766e;
+  --color-brand-light: #5eead4;
+  --color-accent: #e63946;
 
-    --gradient-brand: linear-gradient(
-      135deg,
-      #09282d 0%,
-      #336366 30%,
-      #68a0a1 60%,
-      #7ce6e3 100%
-    );
-    --gradient-hero: linear-gradient(
-      120deg,
-      #09282d 0%,
-      #68a0a1 40%,
-      #7ce6e3 100%
-    );
-    --gradient-glow: radial-gradient(
-      circle at 50% 50%,
-      rgba(124, 230, 227, 0.4),
-      transparent 70%
-    );
-  }
+  --gradient-brand: linear-gradient(
+    135deg,
+    #134e4a 0%,
+    #0d9488 30%,
+    #14b8a6 60%,
+    #5eead4 100%
+  );
+  --gradient-hero: linear-gradient(
+    120deg,
+    #134e4a 0%,
+    #14b8a6 40%,
+    #5eead4 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle at 50% 50%,
+    rgba(94, 234, 212, 0.5),
+    transparent 70%
+  );
+}
+
+/* Manual dark mode override with .dark class */
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --color-bg: #0a0a0a;
+  --color-bg-muted: #1a1a1a;
+  --color-surface: #1a1a1a;
+  --color-surface-alt: #2a2a2a;
+  --color-text: #f8fafc;
+  --color-text-muted: #99f6e4;
+  --color-border: #2d3d3d;
+  --color-brand: #2dd4bf;
+  --color-brand-dark: #0f766e;
+  --color-brand-light: #5eead4;
+  --color-accent: #e63946;
+
+  --gradient-brand: linear-gradient(
+    135deg,
+    #134e4a 0%,
+    #0d9488 30%,
+    #14b8a6 60%,
+    #5eead4 100%
+  );
+  --gradient-hero: linear-gradient(
+    120deg,
+    #134e4a 0%,
+    #14b8a6 40%,
+    #5eead4 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle at 50% 50%,
+    rgba(94, 234, 212, 0.5),
+    transparent 70%
+  );
+}
+
+/* Force light mode - overrides system preference */
+html.light {
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-bg: #ffffff;
+  --color-bg-muted: #f0fdfa;
+  --color-bg-invert: #134e4a;
+  --color-surface: #ffffff;
+  --color-surface-alt: #14b8a6;
+  --color-text: #134e4a;
+  --color-text-muted: #0f766e;
+  --color-text-invert: #f1f5f9;
+  --color-border: #ccfbf1;
+  --color-brand: #14b8a6;
+  --color-brand-dark: #0f766e;
+  --color-brand-light: #5eead4;
+  --color-accent: #e63946;
+  --color-success: #14b8a6;
+  --color-danger: #dc2626;
+
+  --gradient-brand: linear-gradient(
+    135deg,
+    #134e4a 0%,
+    #0d9488 30%,
+    #14b8a6 60%,
+    #5eead4 100%
+  );
+  --gradient-hero: linear-gradient(
+    120deg,
+    #134e4a 0%,
+    #14b8a6 40%,
+    #5eead4 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle at 50% 50%,
+    rgba(94, 234, 212, 0.4),
+    transparent 70%
+  );
 }
 
 html {
@@ -304,68 +391,9 @@ body {
   font-family: var(--font-inter);
 }
 
-/* Dark mode enhanced variables */
-.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --color-bg: #0f172a;
-  --color-bg-muted: #1e293b;
-  --color-bg-invert: #ffffff;
-  --color-surface: #1e293b;
-  --color-surface-alt: #334155;
-  --color-text: #f1f5f9;
-  --color-text-muted: #94a3b8;
-  --color-text-invert: #0f172a;
-  --color-border: #334155;
-  --color-brand: #348856;
-  --color-brand-dark: #00491d;
-  --color-brand-light: #4d9966;
-  --color-accent: #f1faee;
+/* Dark mode enhanced variables - Removed duplicate, using teal colors from .dark class above */
 
-  --gradient-brand: linear-gradient(
-    135deg,
-    #00491d 0%,
-    #348856 50%,
-    #4d4d4d 100%
-  );
-  --gradient-hero: linear-gradient(
-    120deg,
-    #00491d 0%,
-    #348856 40%,
-    #4d4d4d 100%
-  );
-  --gradient-glow: radial-gradient(
-    circle at 50% 50%,
-    rgba(52, 136, 86, 0.4),
-    transparent 70%
-  );
-}
-
-.dark.theme-palette-2 {
-  --color-brand: #7ce6e3;
-  --color-brand-dark: #09282d;
-  --color-brand-light: #a8dadc;
-  --color-accent: #e63946;
-
-  --gradient-brand: linear-gradient(
-    135deg,
-    #09282d 0%,
-    #336366 30%,
-    #68a0a1 60%,
-    #7ce6e3 100%
-  );
-  --gradient-hero: linear-gradient(
-    120deg,
-    #09282d 0%,
-    #68a0a1 40%,
-    #7ce6e3 100%
-  );
-  --gradient-glow: radial-gradient(
-    circle at 50% 50%,
-    rgba(124, 230, 227, 0.4),
-    transparent 70%
-  );
-}
+/* Removed duplicate .dark.theme-palette-2 - using vibrant teal from .dark class above */
 
 /* Utility container */
 .container-shell {
@@ -599,6 +627,15 @@ section[data-section] {
 }
 .animate-float-8 {
   animation: float-vertical 11s ease-in-out infinite reverse;
+}
+
+/* Text on brand color - better contrast */
+.text-on-brand {
+  color: #ffffff;
+}
+
+.dark .text-on-brand {
+  color: #0a0a0a;
 }
 
 /* Focus ring */

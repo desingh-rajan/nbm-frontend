@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, logout, isSuperAdmin } = useAuth();
@@ -18,6 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Dashboard', href: '/admin', icon: '📊' },
     { name: 'Articles', href: '/admin/articles', icon: '📝' },
     ...(isSuperAdmin ? [{ name: 'User Management', href: '/admin/users', icon: '👥' }] : []),
+    ...(isSuperAdmin ? [{ name: 'Site Settings', href: '/admin/site-settings', icon: '⚙️' }] : []),
   ];
 
   return (
@@ -35,6 +37,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* User Menu */}
             <div className="flex items-center gap-4">
+              <ThemeToggle />
               <div className="text-right">
                 <p className="text-sm font-medium text-[var(--color-text)]">
                   {user?.username}
@@ -67,7 +70,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all
                     ${isActive
-                      ? 'bg-[var(--color-brand)] text-white'
+                      ? 'bg-[var(--color-brand)] text-white dark:text-[#0a0a0a]'
                       : 'text-[var(--color-text)] hover:bg-[var(--color-bg)]'
                     }`}
                 >

@@ -2,7 +2,7 @@
 
 import { client } from './client';
 
-const BASE_PATH = '/admin/users';
+const BASE_PATH = '/nbm-be/api/admin/users';
 
 export interface UserUpdateData {
   email?: string;
