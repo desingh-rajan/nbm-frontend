@@ -44,7 +44,8 @@ export default function SiteSettingsPage() {
   const filteredSettings =
     selectedCategory === 'all' ? settings : settings.filter((s) => s.category === selectedCategory)
 
-  if (isLoading) {
+  // Only show loading on initial load, not on cached data
+  if (isLoading && settings.length === 0) {
     return (
       <ProtectedRoute requireSuperAdmin>
         <AdminLayout>

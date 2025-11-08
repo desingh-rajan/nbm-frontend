@@ -14,16 +14,16 @@ export default function ProtectedRoute({ children, requireSuperAdmin = false }: 
   const { user, isLoading, isSuperAdmin } = useAuth()
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        router.push('/login')
-      } else if (requireSuperAdmin && !isSuperAdmin) {
-        router.push('/admin')
-      }
+    if (!isLoading && !user) {
+      router.push('/login')
+    } else if (!isLoading && requireSuperAdmin && !isSuperAdmin) {
+      router.push('/admin')
     }
   }, [user, isLoading, requireSuperAdmin, isSuperAdmin, router])
 
-  if (isLoading) {
+  // Only show spinner on initial load when we have no user data at all
+  // Once we have cached user data, render immediately
+  if (isLoading && !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)]">
         <div className="text-center">

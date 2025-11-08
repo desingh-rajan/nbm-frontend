@@ -35,7 +35,8 @@ export default function UsersPage() {
     })
   }
 
-  if (isLoading) {
+  // Only show loading on initial load, not on cached data
+  if (isLoading && users.length === 0) {
     return (
       <ProtectedRoute requireSuperAdmin>
         <AdminLayout>

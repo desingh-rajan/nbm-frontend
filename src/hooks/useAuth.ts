@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { authApi } from '@/lib/api'
 import type { User } from '@/types'
@@ -10,17 +11,25 @@ import type { User } from '@/types'
 export function useAuth() {
   const queryClient = useQueryClient()
 
-  // Get current user
+  // Prevent hydration mismatch: only check token on client side
+  const [isClient, setIsClient] = useState(false)
+  
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Check if token exists BEFORE running the query (client-side only)
+  const token = isClient ? authApi.getToken() : null
+
+  // Get current user - only run query if token exists
   const { data: user, isLoading, error } = useQuery<User>({
     queryKey: ['auth', 'me'],
     queryFn: async () => {
-      const token = authApi.getToken()
-      if (!token) throw new Error('No token')
-
       const response = await authApi.getMe()
       if (response.error) throw new Error(response.error)
       return response.data
     },
+    enabled: isClient && !!token, // 🔥 Only run query on client with token!
     retry: false,
     staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh for 5 min
     gcTime: 10 * 60 * 1000, // 10 minutes - cache time
@@ -44,7 +53,10 @@ export function useAuth() {
 
       return userData
     },
-    onSuccess: () => {
+    onSuccess: (userData) => {
+      // Set user data directly in cache for instant update
+      queryClient.setQueryData(['auth', 'me'], userData)
+      // Then invalidate to refetch if needed
       queryClient.invalidateQueries({ queryKey: ['auth', 'me'] })
     },
   })

@@ -17,7 +17,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: '📊' },
-    { name: 'Articles', href: '/admin/articles', icon: '📝' },
+    // { name: 'Articles', href: '/admin/articles', icon: '📝' }, // Disabled - scaffold entity for testing
     ...(isSuperAdmin ? [{ name: 'User Management', href: '/admin/users', icon: '👥' }] : []),
     ...(isSuperAdmin ? [{ name: 'Site Settings', href: '/admin/site-settings', icon: '⚙️' }] : []),
   ];
@@ -60,7 +60,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 bg-[var(--color-card)] border-r border-[var(--color-border)] min-h-[calc(100vh-4rem)] sticky top-16">
+        <aside className="w-64 bg-[var(--color-card)] border-r border-[var(--color-border)] min-h-screen">
           <nav className="p-4 space-y-2">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
@@ -95,12 +95,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               >
                 <span>🏠</span> View Site
               </a>
-              <Link
-                href="/admin/settings"
-                className="flex items-center gap-2 text-sm text-[var(--color-text)] hover:text-[var(--color-brand)] transition-colors"
-              >
-                <span>⚙️</span> Settings
-              </Link>
             </div>
           </div>
         </aside>

@@ -2,11 +2,8 @@
 
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import AdminLayout from '@/components/admin/AdminLayout'
-import { useAuth } from '@/hooks'
 
 export default function AdminDashboard() {
-  const { user, isSuperAdmin } = useAuth()
-
   return (
     <ProtectedRoute>
       <AdminLayout>
@@ -14,7 +11,7 @@ export default function AdminDashboard() {
           {/* Welcome Section */}
           <div>
             <h1 className="text-3xl font-display font-bold text-[var(--color-text)] mb-2">
-              Welcome back, {user?.username}! 👋
+              Welcome back! 👋
             </h1>
             <p className="text-[var(--color-text-muted)]">
               Here&apos;s what&apos;s happening with your site today.
@@ -72,19 +69,17 @@ export default function AdminDashboard() {
                 </div>
               </a>
 
-              {isSuperAdmin && (
-                <a
-                  href="/admin/users"
-                  className="flex items-center gap-3 p-4 bg-[var(--color-bg)] hover:bg-[var(--color-brand)] 
-                           hover:text-white border border-[var(--color-border)] rounded-lg transition-all group"
-                >
-                  <span className="text-2xl">👥</span>
-                  <div>
-                    <p className="font-medium">Manage Users</p>
-                    <p className="text-sm opacity-75">Add or edit users</p>
-                  </div>
-                </a>
-              )}
+              <a
+                href="/admin/users"
+                className="flex items-center gap-3 p-4 bg-[var(--color-bg)] hover:bg-[var(--color-brand)] 
+                         hover:text-white border border-[var(--color-border)] rounded-lg transition-all group"
+              >
+                <span className="text-2xl">👥</span>
+                <div>
+                  <p className="font-medium">Manage Users</p>
+                  <p className="text-sm opacity-75">Add or edit users</p>
+                </div>
+              </a>
 
               <a
                 href="/admin/settings"

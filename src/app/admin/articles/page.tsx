@@ -35,7 +35,8 @@ export default function ArticlesPage() {
     })
   }
 
-  if (isLoading) {
+  // Only show loading on initial load, not on cached data
+  if (isLoading && articles.length === 0) {
     return (
       <ProtectedRoute>
         <AdminLayout>
