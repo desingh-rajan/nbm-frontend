@@ -13,7 +13,7 @@ export function useAuth() {
 
   // Prevent hydration mismatch: only check token on client side
   const [isClient, setIsClient] = useState(false)
-  
+
   useEffect(() => {
     setIsClient(true)
   }, [])
