@@ -1,8 +1,82 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUpdateSiteSetting, useDeleteSiteSetting } from '@/hooks'
 import type { SiteSetting } from '@/lib/api'
+
+// Helper to render nested key-value inputs
+interface KeyValueInputProps {
+  data: Record<string, unknown>
+  onChange: (newData: Record<string, unknown>) => void
+  path?: string
+}
+
+function KeyValueInputs({ data, onChange, path = '' }: KeyValueInputProps) {
+  if (typeof data !== 'object' || data === null) {
+    return null
+  }
+
+  const handleFieldChange = (key: string, value: unknown) => {
+    onChange({ ...data, [key]: value })
+  }
+
+  return (
+    <div className="space-y-4">
+      {Object.entries(data).map(([key, value]) => {
+        const fieldPath = path ? `${path}.${key}` : key
+        const isObject = typeof value === 'object' && value !== null && !Array.isArray(value)
+        const isArray = Array.isArray(value)
+
+        return (
+          <div key={fieldPath} className={isObject ? 'pl-0' : ''}>
+            {isObject ? (
+              <div className="border-l-4 border-[var(--color-brand)] pl-4 space-y-3">
+                <label className="block text-sm font-semibold text-[var(--color-text)] capitalize">
+                  {key.replace(/([A-Z])/g, ' $1').trim()}
+                </label>
+                <KeyValueInputs
+                  data={value as Record<string, unknown>}
+                  onChange={(newValue) => handleFieldChange(key, newValue)}
+                  path={fieldPath}
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text)] mb-2 capitalize">
+                  {key.replace(/([A-Z])/g, ' $1').trim()}
+                </label>
+                <input
+                  type={typeof value === 'number' ? 'number' : typeof value === 'boolean' ? 'checkbox' : 'text'}
+                  value={typeof value === 'boolean' ? undefined : String(value)}
+                  checked={typeof value === 'boolean' ? value : undefined}
+                  onChange={(e) => {
+                    let newValue: string | number | boolean | string[] = e.target.value
+                    if (typeof value === 'number') {
+                      newValue = parseFloat(e.target.value) || 0
+                    } else if (typeof value === 'boolean') {
+                      newValue = e.target.checked
+                    } else if (isArray) {
+                      newValue = e.target.value.split(',').map(v => v.trim())
+                    }
+                    handleFieldChange(key, newValue)
+                  }}
+                  className={`w-full px-4 py-2.5 border border-[var(--color-border)] rounded-lg bg-[var(--color-bg)] text-[var(--color-text)] focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-none ${typeof value === 'boolean' ? 'w-5 h-5' : ''
+                    }`}
+                  placeholder={isArray ? 'Comma-separated values' : ''}
+                />
+                {isArray && (
+                  <p className="text-xs text-[var(--color-text-muted)] mt-1">
+                    Current: {JSON.stringify(value)}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 
 interface ViewSettingModalProps {
   setting: SiteSetting
@@ -15,12 +89,39 @@ export function ViewSettingModal({ setting, onClose, onSuccess }: ViewSettingMod
   const { mutate: deleteSetting, isPending: isDeleting } = useDeleteSiteSetting()
   const [isEditing, setIsEditing] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [editMode, setEditMode] = useState<'visual' | 'json'>('visual') // Toggle between visual and JSON editing
   const [formData, setFormData] = useState({
     category: setting.category,
     value: JSON.stringify(setting.value, null, 2),
+    visualValue: setting.value, // Parsed object for visual editing
     isPublic: setting.isPublic,
     description: setting.description || '',
   })
+
+  // Sync visual changes to JSON
+  useEffect(() => {
+    if (editMode === 'visual') {
+      try {
+        setFormData(prev => ({
+          ...prev,
+          value: JSON.stringify(prev.visualValue, null, 2)
+        }))
+      } catch {
+        // Ignore serialization errors
+      }
+    }
+  }, [formData.visualValue, editMode])
+
+  // Sync JSON changes to visual
+  const handleJsonChange = (newJson: string) => {
+    setFormData(prev => ({ ...prev, value: newJson }))
+    try {
+      const parsed = JSON.parse(newJson)
+      setFormData(prev => ({ ...prev, visualValue: parsed }))
+    } catch {
+      // Invalid JSON, keep visual value unchanged
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,8 +148,7 @@ export function ViewSettingModal({ setting, onClose, onSuccess }: ViewSettingMod
           },
         }
       )
-    } catch (err) {
-      console.error('Failed to parse JSON:', err)
+    } catch {
       alert('Failed to update setting. Please check your JSON syntax.')
     }
   }
@@ -67,9 +167,9 @@ export function ViewSettingModal({ setting, onClose, onSuccess }: ViewSettingMod
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[var(--color-surface)] rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div className="bg-[var(--color-surface)] rounded-2xl max-w-7xl w-full h-[95vh] flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="p-8 border-b border-[var(--color-border)]">
+        <div className="p-6 border-b border-[var(--color-border)] flex-shrink-0">
           <div className="flex justify-between items-start mb-4">
             <div className="flex-1">
               <h2 className="text-3xl font-display font-bold text-[var(--color-text)] mb-2">
@@ -117,7 +217,7 @@ export function ViewSettingModal({ setting, onClose, onSuccess }: ViewSettingMod
         </div>
 
         {!isEditing ? (
-          <div className="p-8 space-y-6">
+          <div className="p-6 space-y-6 overflow-y-auto flex-1">
             {setting.description && (
               <div>
                 <label className="block text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
@@ -167,75 +267,118 @@ export function ViewSettingModal({ setting, onClose, onSuccess }: ViewSettingMod
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-8 space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-[var(--color-text)] mb-3">Category</label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-4 py-3 border border-[var(--color-border)] rounded-xl bg-[var(--color-bg)] text-[var(--color-text)] focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-none"
-              >
-                <option value="general">General</option>
-                <option value="email">Email</option>
-                <option value="appearance">Appearance</option>
-                <option value="features">Features</option>
-                <option value="sections">Sections</option>
-                <option value="showcase">Showcase</option>
-              </select>
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+            <div className="p-6 space-y-5 overflow-y-auto flex-1">
+              <div>
+                <label className="block text-sm font-semibold text-[var(--color-text)] mb-3">Category</label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="w-full px-4 py-3 border border-[var(--color-border)] rounded-xl bg-[var(--color-bg)] text-[var(--color-text)] focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-none"
+                >
+                  <option value="general">General</option>
+                  <option value="email">Email</option>
+                  <option value="appearance">Appearance</option>
+                  <option value="features">Features</option>
+                  <option value="sections">Sections</option>
+                  <option value="showcase">Showcase</option>
+                </select>
+              </div>
+
+              {/* Toggle between Visual and JSON editing */}
+              <div className="flex gap-2 border-b border-[var(--color-border)]">
+                <button
+                  type="button"
+                  onClick={() => setEditMode('visual')}
+                  className={`px-4 py-2 font-medium transition-all ${editMode === 'visual'
+                    ? 'text-[var(--color-brand)] border-b-2 border-[var(--color-brand)]'
+                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+                    }`}
+                >
+                  📝 Visual Editor
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditMode('json')}
+                  className={`px-4 py-2 font-medium transition-all ${editMode === 'json'
+                    ? 'text-[var(--color-brand)] border-b-2 border-[var(--color-brand)]'
+                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+                    }`}
+                >
+                  { } JSON Editor
+                </button>
+              </div>
+
+              {editMode === 'visual' ? (
+                <div>
+                  <label className="block text-sm font-semibold text-[var(--color-text)] mb-4">
+                    Configuration Value
+                  </label>
+                  <div className="bg-[var(--color-bg)] p-6 rounded-xl border border-[var(--color-border)] max-h-[50vh] overflow-y-auto">
+                    <KeyValueInputs
+                      data={formData.visualValue}
+                      onChange={(newValue) => setFormData(prev => ({ ...prev, visualValue: newValue }))}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-sm font-semibold text-[var(--color-text)] mb-3">
+                    Configuration Value (JSON)
+                  </label>
+                  <textarea
+                    required
+                    value={formData.value}
+                    onChange={(e) => handleJsonChange(e.target.value)}
+                    className="w-full px-4 py-3 border border-[var(--color-border)] rounded-xl bg-[var(--color-bg)] text-[var(--color-text)] font-mono text-sm leading-relaxed focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-none"
+                    rows={12}
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-semibold text-[var(--color-text)] mb-3">Description</label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="w-full px-4 py-3 border border-[var(--color-border)] rounded-xl bg-[var(--color-bg)] text-[var(--color-text)] focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-none"
+                  rows={2}
+                  placeholder="Describe what this setting controls..."
+                />
+              </div>
+
+              <div className="flex items-center gap-3 p-4 bg-[var(--color-bg-muted)] rounded-xl">
+                <input
+                  type="checkbox"
+                  id="isPublicEdit"
+                  checked={formData.isPublic}
+                  onChange={(e) => setFormData({ ...formData, isPublic: e.target.checked })}
+                  className="w-5 h-5 text-[var(--color-brand)] rounded focus:ring-2 focus:ring-[var(--color-brand)]"
+                />
+                <label htmlFor="isPublicEdit" className="text-sm font-medium text-[var(--color-text)]">
+                  Make this setting publicly accessible (visible to frontend)
+                </label>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-[var(--color-text)] mb-3">
-                Configuration Value (JSON)
-              </label>
-              <textarea
-                required
-                value={formData.value}
-                onChange={(e) => setFormData({ ...formData, value: e.target.value })}
-                className="w-full px-4 py-3 border border-[var(--color-border)] rounded-xl bg-[var(--color-bg)] text-[var(--color-text)] font-mono text-sm leading-relaxed focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-none"
-                rows={16}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-[var(--color-text)] mb-3">Description</label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-4 py-3 border border-[var(--color-border)] rounded-xl bg-[var(--color-bg)] text-[var(--color-text)] focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-none"
-                rows={2}
-                placeholder="Describe what this setting controls..."
-              />
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-[var(--color-bg-muted)] rounded-xl">
-              <input
-                type="checkbox"
-                id="isPublicEdit"
-                checked={formData.isPublic}
-                onChange={(e) => setFormData({ ...formData, isPublic: e.target.checked })}
-                className="w-5 h-5 text-[var(--color-brand)] rounded focus:ring-2 focus:ring-[var(--color-brand)]"
-              />
-              <label htmlFor="isPublicEdit" className="text-sm font-medium text-[var(--color-text)]">
-                Make this setting publicly accessible (visible to frontend)
-              </label>
-            </div>
-
-            <div className="flex gap-3 pt-6">
-              <button
-                type="button"
-                onClick={() => setIsEditing(false)}
-                className="flex-1 px-6 py-3 border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-bg-muted)] transition-colors font-medium"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isUpdating}
-                className="flex-1 px-6 py-3 bg-[var(--color-brand)] text-white dark:text-[#0a0a0a] rounded-lg hover:bg-[var(--color-brand-dark)] transition-all disabled:opacity-50 font-medium shadow-lg"
-              >
-                {isUpdating ? 'Saving...' : 'Save Changes'}
-              </button>
+            {/* Footer with buttons - fixed at bottom */}
+            <div className="p-6 border-t border-[var(--color-border)] flex-shrink-0 bg-[var(--color-surface)]">
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="flex-1 px-6 py-3 border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-bg-muted)] transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isUpdating}
+                  className="flex-1 px-6 py-3 bg-[var(--color-brand)] text-white dark:text-[#0a0a0a] rounded-lg hover:bg-[var(--color-brand-dark)] transition-all disabled:opacity-50 font-medium shadow-lg"
+                >
+                  {isUpdating ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
             </div>
           </form>
         )}
