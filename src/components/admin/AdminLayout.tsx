@@ -3,7 +3,7 @@
 import { useAuth } from '@/hooks'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { memo, useMemo, useCallback } from 'react'
+import { memo, useMemo, useCallback, useEffect } from 'react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const Navigation = memo(({ navigation, pathname }: { navigation: Array<{ name: string; href: string; icon: string }>; pathname: string }) => (
@@ -46,6 +46,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ...(isSuperAdmin ? [{ name: 'User Management', href: '/admin/users', icon: '👥' }] : []),
     ...(isSuperAdmin ? [{ name: 'Site Settings', href: '/admin/site-settings', icon: '⚙️' }] : []),
   ], [isSuperAdmin]);
+
+  // Mark admin routes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-admin', 'true');
+    return () => {
+      document.documentElement.removeAttribute('data-admin');
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">

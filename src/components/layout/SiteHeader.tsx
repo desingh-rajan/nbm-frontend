@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import ColorPaletteToggleCompact from '@/components/ui/ColorPaletteToggleCompact';
 
 const NAV_LINKS = [
   { href: '#portfolio-hero', label: 'Home' },
@@ -49,7 +48,7 @@ export const SiteHeader: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-[var(--color-bg-invert)]/70 border-b border-[var(--color-border)]">
+    <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-[var(--color-border)]">
       <div className="container-shell flex h-16 items-center justify-between gap-2 md:gap-4">
         <Link href="#" className="flex items-center gap-2 md:gap-3 font-semibold text-base md:text-lg tracking-tight group">
           <Image
@@ -60,7 +59,7 @@ export const SiteHeader: React.FC = () => {
             className="h-8 w-8 md:h-10 md:w-10 object-contain group-hover:scale-110 transition-transform flex-shrink-0"
           />
           <span className="whitespace-nowrap">
-            <span className="text-[var(--color-brand)]">Never Before</span> <span className="text-[var(--color-text)] dark:text-[var(--color-text-invert)]">Marketing</span>
+            <span className="text-[var(--color-brand)]">Never Before</span> <span className="text-[var(--color-text)]">Marketing</span>
           </span>
         </Link>
 
@@ -77,25 +76,20 @@ export const SiteHeader: React.FC = () => {
           ))}
         </nav>
 
-        {/* Right side: Color Palette Toggle + Mobile Menu */}
-        <div className="flex items-center gap-3">
-          <ColorPaletteToggleCompact />
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className="md:hidden text-sm tracking-wide px-3 py-2 border rounded-full border-[var(--color-border)] hover:bg-[var(--color-bg-muted)] transition-colors"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle mobile menu"
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? 'Close' : 'Menu'}
-          </button>
-        </div>
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden text-sm tracking-wide px-3 py-2 border rounded-full border-[var(--color-border)] hover:bg-[var(--color-bg-muted)] transition-colors"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+          aria-expanded={isMobileMenuOpen}
+        >
+          {isMobileMenuOpen ? 'Close' : 'Menu'}
+        </button>
       </div>
 
       {/* Mobile Navigation Menu - Only shows on mobile */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-[var(--color-bg-invert)] border-b border-[var(--color-border)] backdrop-blur supports-[backdrop-filter]:bg-white/95 dark:supports-[backdrop-filter]:bg-[var(--color-bg-invert)]/95">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-[var(--color-border)] backdrop-blur supports-[backdrop-filter]:bg-white/95">
           <nav className="container-shell py-4" aria-label="Mobile navigation">
             <div className="flex flex-col gap-4">
               {NAV_LINKS.map(l => (

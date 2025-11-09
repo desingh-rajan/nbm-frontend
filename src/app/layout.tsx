@@ -68,14 +68,31 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('theme');
-                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  if (theme === 'dark' || (!theme && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                    document.documentElement.classList.remove('light');
-                  } else if (theme === 'light' || (!theme && !prefersDark)) {
-                    document.documentElement.classList.add('light');
-                    document.documentElement.classList.remove('dark');
+                  var isAdmin = window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/login');
+                  
+                  if (isAdmin) {
+                    // Admin: restore saved theme or use system preference
+                    var html = document.documentElement;
+                    html.setAttribute('data-admin', 'true');
+                    
+                    var savedTheme = localStorage.getItem('admin-theme');
+                    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    var theme = savedTheme || (prefersDark ? 'dark' : 'light');
+                    
+                    if (theme === 'dark') {
+                      html.classList.add('dark');
+                      html.classList.remove('light');
+                    } else {
+                      html.classList.add('light');
+                      html.classList.remove('dark');
+                    }
+                  } else {
+                    // Landing page: force light mode
+                    var html = document.documentElement;
+                    html.classList.add('light', 'theme-palette-2');
+                    html.classList.remove('dark');
+                    html.style.colorScheme = 'light';
+                    localStorage.setItem('colorPalette', 'palette2');
                   }
                 } catch (e) {}
               })();

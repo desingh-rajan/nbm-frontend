@@ -17,13 +17,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    // Get initial theme
-    const stored = localStorage.getItem('theme') as Theme | null;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = stored || (prefersDark ? 'dark' : 'light');
 
-    setTheme(initialTheme);
-    applyTheme(initialTheme);
+    // Check if we're in the admin dashboard
+    const isAdminRoute = window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/login');
+
+    if (isAdminRoute) {
+      // Admin routes: allow theme toggle functionality
+      const stored = localStorage.getItem('admin-theme') as Theme | null;
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = stored || (prefersDark ? 'dark' : 'light');
+
+      setTheme(initialTheme);
+      applyTheme(initialTheme);
+    } else {
+      // Landing page: FORCE light mode - handled by LandingPageWrapper
+      setTheme('light');
+      // Don't apply here, let LandingPageWrapper handle it
+    }
   }, []);
 
   const applyTheme = (newTheme: Theme) => {
@@ -37,9 +47,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const toggleTheme = () => {
+    // Only allow theme toggle in admin/login routes
+    const isAdminRoute = window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/login');
+    if (!isAdminRoute) {
+      return; // Do nothing for landing page
+    }
+
     const newTheme: Theme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem('admin-theme', newTheme); // Separate storage for admin
     applyTheme(newTheme);
   };
 

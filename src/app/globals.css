@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Landing page: Always light mode (enforced via LandingPageWrapper) */
+/* Admin dashboard: Dark mode support via html[data-admin].dark */
+
+html:not([data-admin]) {
+  color-scheme: light !important;
+}
+
+html:not([data-admin]).dark {
+  /* Prevent dark mode on landing page */
+  --color-bg: #ffffff !important;
+  --color-text: #134e4a !important;
+}
+
 /* Base light theme tokens */
 :root {
   /* Legacy base from scaffold */
@@ -38,6 +51,7 @@
   --color-bg-invert: #134e4a; /* Dark teal */
   --color-surface: #ffffff;
   --color-surface-alt: #14b8a6; /* Vibrant teal */
+  --color-card: #ffffff; /* Card background for admin */
 
   /* Text */
   --color-text: #134e4a; /* Dark teal */
@@ -208,46 +222,11 @@
 
 /* Removed experimental @theme block; using CSS vars directly */
 
-/* System dark mode preference */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --color-bg: #0a0a0a;
-    --color-bg-muted: #1a1a1a;
-    --color-surface: #1a1a1a;
-    --color-surface-alt: #2a2a2a;
-    --color-text: #f8fafc;
-    --color-text-muted: #99f6e4;
-    --color-border: #2d3d3d;
-    --color-brand: #2dd4bf;
-    --color-brand-dark: #0f766e;
-    --color-brand-light: #5eead4;
-    --color-accent: #e63946;
+/* Dark mode CSS - ONLY for admin routes (via [data-admin] attribute) */
+/* Landing page uses separate theme enforcement via LandingPageWrapper */
 
-    --gradient-brand: linear-gradient(
-      135deg,
-      #134e4a 0%,
-      #0d9488 30%,
-      #14b8a6 60%,
-      #5eead4 100%
-    );
-    --gradient-hero: linear-gradient(
-      120deg,
-      #134e4a 0%,
-      #14b8a6 40%,
-      #5eead4 100%
-    );
-    --gradient-glow: radial-gradient(
-      circle at 50% 50%,
-      rgba(94, 234, 212, 0.5),
-      transparent 70%
-    );
-  }
-}
-
-/* Dark mode with .dark class (for toggle) */
-.dark {
+/* Admin dark mode styles */
+html[data-admin].dark {
   --background: #0a0a0a;
   --foreground: #ededed;
   --color-bg: #0a0a0a;
@@ -261,42 +240,7 @@
   --color-brand-dark: #0f766e;
   --color-brand-light: #5eead4;
   --color-accent: #e63946;
-
-  --gradient-brand: linear-gradient(
-    135deg,
-    #134e4a 0%,
-    #0d9488 30%,
-    #14b8a6 60%,
-    #5eead4 100%
-  );
-  --gradient-hero: linear-gradient(
-    120deg,
-    #134e4a 0%,
-    #14b8a6 40%,
-    #5eead4 100%
-  );
-  --gradient-glow: radial-gradient(
-    circle at 50% 50%,
-    rgba(94, 234, 212, 0.5),
-    transparent 70%
-  );
-}
-
-/* Manual dark mode override with .dark class */
-html.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --color-bg: #0a0a0a;
-  --color-bg-muted: #1a1a1a;
-  --color-surface: #1a1a1a;
-  --color-surface-alt: #2a2a2a;
-  --color-text: #f8fafc;
-  --color-text-muted: #99f6e4;
-  --color-border: #2d3d3d;
-  --color-brand: #2dd4bf;
-  --color-brand-dark: #0f766e;
-  --color-brand-light: #5eead4;
-  --color-accent: #e63946;
+  --color-card: #1a1a1a;
 
   --gradient-brand: linear-gradient(
     135deg,
@@ -415,12 +359,7 @@ section[data-section] {
     padding-block: var(--section-y);
   }
 }
-@media (prefers-color-scheme: dark) {
-  section[data-section] {
-    background: linear-gradient(180deg, #10231a 0%, #1a2e23 100%);
-    color: #e6ffe6;
-  }
-}
+/* Dark mode media query removed - light mode only */
 
 /* Aesthetic helpers */
 .shadow-card {

@@ -4,7 +4,7 @@ const YEAR = new Date().getFullYear();
 
 export const SiteFooter: React.FC = () => {
   return (
-    <footer className="mt-24 border-t border-[var(--color-border)] bg-[var(--color-bg-muted)] dark:bg-[var(--color-surface-alt)]/40">
+    <footer className="mt-24 border-t border-[var(--color-border)] bg-[var(--color-bg-muted)]">
       <div className="container-shell py-12 flex flex-col gap-12 md:flex-row md:justify-between">
         <div className="flex flex-col gap-4 max-w-sm">
           <div className="font-semibold text-lg tracking-tight"><span className="text-[var(--color-brand-dark)]">Never Before</span> Marketing</div>

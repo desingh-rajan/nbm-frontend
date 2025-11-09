@@ -113,7 +113,7 @@ export const PortfolioHero: React.FC = () => {
           >
             Graphics, Animation & Storytelling that Moves Brands Forward
           </h1>
-          <p className="text-white/95 dark:text-[var(--color-text-muted)] max-w-3xl text-sm md:text-lg leading-relaxed tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] dark:drop-shadow-none">
+          <p className="text-white max-w-3xl text-base md:text-xl leading-relaxed tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] font-medium">
             We craft high-impact motion graphics, cinematic product & lifestyle edits, and narrative-driven ad films for brands in jewellery, fitness, retail and beyond — engineered to stop scrolls and spark action.
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-4">

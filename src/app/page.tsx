@@ -8,10 +8,11 @@ import ValuesQuadrant from '@/components/portfolio/ValuesQuadrant';
 import SoftwaresSection from '@/components/portfolio/SoftwaresSection';
 import ClientsSection from '@/components/portfolio/ClientsSection';
 import ContactSection from '@/components/portfolio/ContactSection';
+import LandingPageWrapper from '@/components/LandingPageWrapper';
 
 export default function Home() {
   return (
-    <>
+    <LandingPageWrapper>
       <SiteHeader />
       <main className="space-y-28 md:space-y-40 bg-portfolio-subtle">
         <PortfolioHero />
@@ -25,6 +26,6 @@ export default function Home() {
         <ContactSection />
       </main>
       <SiteFooter />
-    </>
+    </LandingPageWrapper>
   );
 }
