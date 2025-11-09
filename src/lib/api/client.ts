@@ -47,28 +47,12 @@ export class ApiClient {
         ...options.headers,
       };
 
-      if (process.env.NODE_ENV === 'development') {
-        console.log('🔵 API Request:', {
-          url,
-          method: options.method || 'GET',
-          headers,
-          body: options.body,
-        });
-      }
-
       const response = await fetch(url, {
         ...options,
         headers,
       });
 
       const rawData = await response.json();
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log('🔵 API Response:', {
-          status: response.status,
-          data: rawData,
-        });
-      }
 
       if (!response.ok) {
         return {
@@ -77,9 +61,12 @@ export class ApiClient {
         };
       }
 
-      // Normalize response: unwrap { data: {...} } wrapper
+      // Smart normalization:
+      // - If response has both 'data' and 'pagination', keep the whole structure
+      // - If response has 'data' but no 'pagination', unwrap it
+      // - Otherwise return as-is
       let normalizedData = rawData;
-      if (rawData.data !== undefined) {
+      if (rawData.data !== undefined && rawData.pagination === undefined) {
         normalizedData = rawData.data;
       }
 

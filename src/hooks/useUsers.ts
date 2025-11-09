@@ -14,10 +14,11 @@ export function useUsers(page = 1, limit = 10) {
       if (response.error) throw new Error(response.error)
       return response.data
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh longer
-    gcTime: 10 * 60 * 1000, // 10 minutes - cache time
+    staleTime: 10 * 60 * 1000, // 10 minutes - data stays fresh longer to reduce API calls
+    gcTime: 15 * 60 * 1000, // 15 minutes - cache time
     refetchOnWindowFocus: false, // Don't refetch on window focus
     refetchOnMount: false, // Don't refetch on mount if data is fresh
+    refetchOnReconnect: false, // Don't refetch when connection restored
   })
 }
 

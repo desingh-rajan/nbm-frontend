@@ -14,40 +14,39 @@ export default function ProtectedRoute({ children, requireSuperAdmin = false }: 
   const { user, isLoading, isSuperAdmin } = useAuth()
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login')
-    } else if (!isLoading && requireSuperAdmin && !isSuperAdmin) {
-      router.push('/admin')
-    }
-  }, [user, isLoading, requireSuperAdmin, isSuperAdmin, router])
+    // Still loading auth check - don't redirect yet
+    if (isLoading) return
 
-  // Only show spinner on initial load when we have no user data at all
-  // Once we have cached user data, render immediately
-  if (isLoading && !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-brand)] mx-auto"></div>
-          <p className="mt-4 text-[var(--color-text-muted)]">Loading...</p>
-        </div>
-      </div>
-    )
+    // Auth check complete, now check authorization
+
+    // No user = not authenticated, redirect to login
+    if (!user) {
+      router.replace('/login')
+      return
+    }
+
+    // SuperAdmin required but user doesn't have it
+    if (requireSuperAdmin && !isSuperAdmin) {
+      router.replace('/admin')
+      return
+    }
+  }, [isLoading, user, isSuperAdmin, requireSuperAdmin, router])
+
+  // While loading, show blank screen
+  if (isLoading) {
+    return <div className="min-h-screen bg-[var(--color-bg)]" />
   }
 
+  // No user and not loading = will redirect
   if (!user) {
     return null
   }
 
+  // SuperAdmin required but user doesn't have permission
   if (requireSuperAdmin && !isSuperAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)]">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-[var(--color-text)] mb-2">Access Denied</h1>
-          <p className="text-[var(--color-text-muted)]">You don&apos;t have permission to access this page.</p>
-        </div>
-      </div>
-    )
+    return null
   }
 
+  // All checks passed
   return <>{children}</>
 }

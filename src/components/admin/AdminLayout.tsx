@@ -3,24 +3,49 @@
 import { useAuth } from '@/hooks'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { memo, useMemo, useCallback } from 'react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+
+const Navigation = memo(({ navigation, pathname }: { navigation: Array<{ name: string; href: string; icon: string }>; pathname: string }) => (
+  <nav className="p-4 space-y-2">
+    {navigation.map((item) => {
+      const isActive = pathname === item.href;
+      return (
+        <Link
+          key={item.name}
+          href={item.href}
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all
+            ${isActive
+              ? 'bg-[var(--color-brand)] text-white dark:text-[#0a0a0a]'
+              : 'text-[var(--color-text)] hover:bg-[var(--color-bg)]'
+            }`}
+        >
+          <span className="text-xl">{item.icon}</span>
+          <span className="font-medium">{item.name}</span>
+        </Link>
+      );
+    })}
+  </nav>
+));
+
+Navigation.displayName = 'Navigation';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, logout, isSuperAdmin } = useAuth()
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await logout();
     router.push('/login');
-  };
+  }, [logout, router]);
 
-  const navigation = [
+  const navigation = useMemo(() => [
     { name: 'Dashboard', href: '/admin', icon: '📊' },
     // { name: 'Articles', href: '/admin/articles', icon: '📝' }, // Disabled - scaffold entity for testing
     ...(isSuperAdmin ? [{ name: 'User Management', href: '/admin/users', icon: '👥' }] : []),
     ...(isSuperAdmin ? [{ name: 'Site Settings', href: '/admin/site-settings', icon: '⚙️' }] : []),
-  ];
+  ], [isSuperAdmin]);
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
@@ -61,25 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex">
         {/* Sidebar */}
         <aside className="w-64 bg-[var(--color-card)] border-r border-[var(--color-border)] min-h-screen">
-          <nav className="p-4 space-y-2">
-            {navigation.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all
-                    ${isActive
-                      ? 'bg-[var(--color-brand)] text-white dark:text-[#0a0a0a]'
-                      : 'text-[var(--color-text)] hover:bg-[var(--color-bg)]'
-                    }`}
-                >
-                  <span className="text-xl">{item.icon}</span>
-                  <span className="font-medium">{item.name}</span>
-                </Link>
-              );
-            })}
-          </nav>
+          <Navigation navigation={navigation} pathname={pathname} />
 
           {/* Quick Links */}
           <div className="p-4 mt-8 border-t border-[var(--color-border)]">

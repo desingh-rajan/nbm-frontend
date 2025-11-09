@@ -1,28 +1,43 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import AdminLayout from '@/components/admin/AdminLayout'
 import { useUsers, useDeleteUser } from '@/hooks'
+import UserRow from '@/components/admin/users/UserRow'
 import { CreateUserModal } from '@/components/admin/users'
 import type { User } from '@/types'
 
+interface PaginationInfo {
+  page?: number
+  limit?: number
+  total?: number
+  totalPages?: number
+  hasNext?: boolean
+  hasPrev?: boolean
+}
+
 export default function UsersPage() {
-  const { data, isLoading, error, refetch } = useUsers()
-  const users = ((data as { users?: User[] })?.users || []) as User[]
+  const [page, setPage] = useState(1)
+  const limit = 10
+  const { data, isLoading, error, refetch } = useUsers(page, limit)
+
+  const users = useMemo(() => ((data as { data?: User[] })?.data || []) as User[], [data])
+  const pagination = useMemo(() => (data as { pagination?: PaginationInfo })?.pagination || {} as PaginationInfo, [data])
+
   const { mutate: deleteUser } = useDeleteUser()
   const [showCreateModal, setShowCreateModal] = useState(false)
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setShowCreateModal(false)
-  }
+  }, [])
 
-  const handleSuccess = () => {
+  const handleSuccess = useCallback(() => {
     handleCloseModal()
     refetch()
-  }
+  }, [handleCloseModal, refetch])
 
-  const handleDeleteUser = async (userId: string) => {
+  const handleDeleteUser = useCallback(async (userId: string) => {
     if (!confirm('Are you sure you want to delete this user?')) return
 
     deleteUser(userId, {
@@ -33,40 +48,7 @@ export default function UsersPage() {
         alert('Failed to delete user: ' + error.message)
       },
     })
-  }
-
-  // Only show loading on initial load, not on cached data
-  if (isLoading && users.length === 0) {
-    return (
-      <ProtectedRoute requireSuperAdmin>
-        <AdminLayout>
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-brand)]"></div>
-          </div>
-        </AdminLayout>
-      </ProtectedRoute>
-    )
-  }
-
-  if (error) {
-    return (
-      <ProtectedRoute requireSuperAdmin>
-        <AdminLayout>
-          <div className="flex flex-col items-center justify-center min-h-[400px]">
-            <div className="text-6xl mb-4">⚠️</div>
-            <p className="text-xl text-[var(--color-text-muted)] mb-4">Failed to load users</p>
-            <p className="text-[var(--color-text-muted)] mb-6">{error.message}</p>
-            <button
-              onClick={() => refetch()}
-              className="px-6 py-3 bg-[var(--color-brand)] text-white dark:text-[#0a0a0a] rounded-lg hover:bg-[var(--color-brand-dark)] transition-all font-medium"
-            >
-              Retry
-            </button>
-          </div>
-        </AdminLayout>
-      </ProtectedRoute>
-    )
-  }
+  }, [deleteUser, refetch])
 
   return (
     <ProtectedRoute requireSuperAdmin>
@@ -98,6 +80,20 @@ export default function UsersPage() {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-brand)] mx-auto"></div>
                 <p className="mt-4 text-[var(--color-text-muted)]">Loading users...</p>
               </div>
+            ) : error ? (
+              <div className="p-8">
+                <div className="flex flex-col items-center justify-center">
+                  <div className="text-6xl mb-4">⚠️</div>
+                  <p className="text-xl text-[var(--color-text-muted)] mb-4">Failed to load users</p>
+                  <p className="text-[var(--color-text-muted)] mb-6">{error.message}</p>
+                  <button
+                    onClick={() => refetch()}
+                    className="px-6 py-3 bg-[var(--color-brand)] text-white dark:text-[#0a0a0a] rounded-lg hover:bg-[var(--color-brand-dark)] transition-all font-medium"
+                  >
+                    Retry
+                  </button>
+                </div>
+              </div>
             ) : users.length === 0 ? (
               <div className="p-8 text-center">
                 <p className="text-[var(--color-text-muted)]">No users found</p>
@@ -126,50 +122,85 @@ export default function UsersPage() {
                   </thead>
                   <tbody className="divide-y divide-[var(--color-border)]">
                     {users.map((user: User) => (
-                      <tr key={user.id} className="hover:bg-[var(--color-bg)] transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10 bg-[var(--color-brand)] rounded-full flex items-center justify-center text-white font-medium">
-                              {user.username.charAt(0).toUpperCase()}
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-[var(--color-text)]">
-                                {user.username}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-[var(--color-text)]">{user.email}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                            ${user.role === 'superadmin' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400' : ''}
-                            ${user.role === 'admin' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : ''}
-                            ${user.role === 'user' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400' : ''}
-                          `}>
-                            {user.role}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--color-text-muted)]">
-                          {new Date(user.createdAt).toLocaleDateString()}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button
-                            onClick={() => handleDeleteUser(user.id)}
-                            disabled={user.role === 'superadmin'}
-                            className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
+                      <UserRow
+                        key={user.id}
+                        user={user}
+                        onDelete={handleDeleteUser}
+                      />
                     ))}
                   </tbody>
                 </table>
               </div>
             )}
           </div>
+
+          {/* Pagination */}
+          {(pagination.totalPages ?? 0) > 1 && (
+            <div className="flex items-center justify-between p-4 bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg">
+              <div className="text-sm text-[var(--color-text-muted)]">
+                Showing {(page - 1) * limit + 1} to {Math.min(page * limit, pagination.total ?? 0)} of {pagination.total ?? 0} users
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={!pagination.hasPrev}
+                  className="px-3 py-2 border border-[var(--color-border)] rounded-lg text-[var(--color-text)] hover:bg-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  Previous
+                </button>
+
+                {/* Smart pagination - show max 5 buttons */}
+                <div className="flex items-center gap-1">
+                  {(() => {
+                    const pages: (number | string)[] = []
+                    const maxButtons = 5
+                    const totalPages = pagination.totalPages ?? 1
+
+                    if (totalPages <= maxButtons) {
+                      // Show all pages if 5 or fewer
+                      for (let i = 1; i <= totalPages; i++) pages.push(i)
+                    } else {
+                      // Show: first, current range, last
+                      pages.push(1)
+                      if (page > 3) pages.push('...')
+
+                      const start = Math.max(2, page - 1)
+                      const end = Math.min(totalPages - 1, page + 1)
+                      for (let i = start; i <= end; i++) pages.push(i)
+
+                      if (page < totalPages - 2) pages.push('...')
+                      pages.push(totalPages)
+                    }
+
+                    return pages.map((p, i) => (
+                      typeof p === 'number' ? (
+                        <button
+                          key={i}
+                          onClick={() => setPage(p)}
+                          className={`px-3 py-2 rounded-lg transition-all ${p === page
+                            ? 'bg-[var(--color-brand)] text-white'
+                            : 'border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-bg)]'
+                            }`}
+                        >
+                          {p}
+                        </button>
+                      ) : (
+                        <span key={i} className="px-2 py-2 text-[var(--color-text-muted)]">{p}</span>
+                      )
+                    ))
+                  })()}
+                </div>
+
+                <button
+                  onClick={() => setPage(p => p + 1)}
+                  disabled={!pagination.hasNext}
+                  className="px-3 py-2 border border-[var(--color-border)] rounded-lg text-[var(--color-text)] hover:bg-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Create User Modal */}

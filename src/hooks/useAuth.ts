@@ -11,31 +11,39 @@ import type { User } from '@/types'
 export function useAuth() {
   const queryClient = useQueryClient()
 
-  // Prevent hydration mismatch: only check token on client side
-  const [isClient, setIsClient] = useState(false)
+  // Track if we've checked the token (prevents premature redirects)
+  const [tokenChecked, setTokenChecked] = useState(false)
+  const [hasStoredToken, setHasStoredToken] = useState(false)
 
+  // Check for stored token immediately
   useEffect(() => {
-    setIsClient(true)
+    const token = authApi.getToken()
+    setHasStoredToken(!!token)
+    setTokenChecked(true)
   }, [])
 
-  // Check if token exists BEFORE running the query (client-side only)
-  const token = isClient ? authApi.getToken() : null
-
-  // Get current user - only run query if token exists
-  const { data: user, isLoading, error } = useQuery<User>({
+  // Get current user - fetch if token exists
+  const { data: user, isLoading } = useQuery<User>({
     queryKey: ['auth', 'me'],
     queryFn: async () => {
       const response = await authApi.getMe()
       if (response.error) throw new Error(response.error)
       return response.data
     },
-    enabled: isClient && !!token, // 🔥 Only run query on client with token!
+    enabled: tokenChecked && hasStoredToken, // Wait until token is checked
     retry: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh for 5 min
-    gcTime: 10 * 60 * 1000, // 10 minutes - cache time
-    refetchOnWindowFocus: false, // Don't refetch when window regains focus
-    refetchOnMount: false, // Don't refetch on component mount if data is fresh
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   })
+
+  // Return proper loading state:
+  // - Return true if we haven't checked token yet
+  // - Return true if query is loading
+  // - Return false once everything is done
+  const authLoading = !tokenChecked || (tokenChecked && hasStoredToken && isLoading)
 
   // Login mutation
   const loginMutation = useMutation({
@@ -86,8 +94,8 @@ export function useAuth() {
   return {
     // User data
     user,
-    isLoading,
-    error,
+    isLoading: authLoading,
+    error: null,
     isAuthenticated: !!user,
 
     // Role checks
