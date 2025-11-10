@@ -1,26 +1,43 @@
+'use client'
+
 import React from 'react';
 import Image from 'next/image';
+import { useSiteSettingValue } from '@/hooks';
 
-interface SoftwareItem { name: string; logo: string; }
-const SOFTWARES: SoftwareItem[] = [
-  { name: 'After Effects', logo: '/logos/after-effects.svg' },
-  { name: 'Premiere Pro', logo: '/logos/premiere-pro.svg' },
-  { name: 'DaVinci Resolve', logo: '/logos/davinci-resolve.svg' },
-  { name: 'Photoshop', logo: '/logos/photoshop.svg' },
-  { name: 'Canva', logo: '/logos/canva.svg' },
-];
+interface SoftwareItem {
+  name: string;
+  icon: string;
+}
 
 export const SoftwaresSection: React.FC = () => {
+  const softwaresData = useSiteSettingValue<{ title: string, items: SoftwareItem[] }>(
+    'softwares_section',
+    {
+      title: 'Industry-Leading Tools',
+      items: [
+        { name: 'After Effects', icon: '/logos/after-effects.svg' },
+        { name: 'Premiere Pro', icon: '/logos/premiere-pro.svg' },
+        { name: 'DaVinci Resolve', icon: '/logos/davinci-resolve.svg' },
+        { name: 'Photoshop', icon: '/logos/photoshop.svg' },
+        { name: 'Canva', icon: '/logos/canva.svg' },
+      ]
+    }
+  );
+
   return (
     <section data-section id="softwares" className="relative">
       <div className="container-shell">
         <div className="rounded-[2.5rem] p-12 md:p-16 bg-gradient-overlay flex flex-col gap-12 shadow-card-lg">
-          <h3 className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide text-gradient-brand text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.12)]">SOFTWARES</h3>
+          <h3 className="text-[clamp(2rem,5vw,3.25rem)] font-display tracking-wide text-gradient-brand text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+            {softwaresData.title}
+          </h3>
           <div className="flex flex-col lg:flex-row gap-10 items-start">
             <ul className="flex flex-wrap gap-6 w-full lg:max-w-sm">
-              {SOFTWARES.map(s => (
+              {softwaresData.items.map(s => (
                 <li key={s.name} className="group flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/90 dark:bg-[var(--color-surface)] border-2 border-[var(--color-brand)] shadow-card hover:shadow-glow-green hover:scale-105 transition-all">
-                  <Image src={s.logo} alt={s.name} width={40} height={40} className="h-10 w-10 rounded-xl" />
+                  {s.icon && (
+                    <Image src={s.icon} alt={s.name} width={40} height={40} className="h-10 w-10 rounded-xl" />
+                  )}
                   <span className="text-sm font-medium tracking-wide text-[var(--color-brand)] group-hover:text-[var(--color-brand-dark)] transition-colors">{s.name}</span>
                 </li>
               ))}
@@ -53,3 +70,4 @@ export const SoftwaresSection: React.FC = () => {
 };
 
 export default SoftwaresSection;
+

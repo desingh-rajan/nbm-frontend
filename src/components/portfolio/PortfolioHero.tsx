@@ -1,7 +1,17 @@
+'use client'
+
 import React from 'react';
+import { useSiteSettingValue } from '@/hooks';
 
 /* Reworked hero: creative studio positioning with category badges */
 export const PortfolioHero: React.FC = () => {
+  // Fetch dynamic content from site settings
+  const heroTitle = useSiteSettingValue<{ title: string }>('hero_title', { title: 'Graphics, Animation & Storytelling that Moves Brands Forward' })
+  const heroDescription = useSiteSettingValue<{ description: string }>('hero_description', {
+    description: 'From concept to screen, we create motion graphics and animations that captivate, engage, and inspire your audience.'
+  })
+  const heroTags = useSiteSettingValue<{ tags: string[] }>('hero_tags', { tags: ['Motion Design', '3D Animation', 'Brand Storytelling'] })
+
   return (
     <section
       data-section
@@ -111,13 +121,13 @@ export const PortfolioHero: React.FC = () => {
           <h1
             className="font-display leading-[1.05] md:leading-[0.95] text-[clamp(2.25rem,8vw,7.5rem)] bg-gradient-to-br from-[#e6fffa] via-[#a7f3d0] to-[#6ee7b7] dark:from-[#5fffa1] dark:to-[#0d8f4a] bg-clip-text text-transparent drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)] dark:drop-shadow-[0_4px_16px_rgba(0,64,32,0.12)]"
           >
-            Graphics, Animation & Storytelling that Moves Brands Forward
+            {heroTitle.title}
           </h1>
           <p className="text-white max-w-3xl text-base md:text-xl leading-relaxed tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] font-medium">
-            We craft high-impact motion graphics, cinematic product & lifestyle edits, and narrative-driven ad films for brands in jewellery, fitness, retail and beyond — engineered to stop scrolls and spark action.
+            {heroDescription.description}
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-4">
-            {['Motion Graphics', 'Ad Films', 'Product Edits', 'Social Campaigns', 'Animations'].map(tag => (
+            {heroTags.tags.map((tag: string) => (
               <span key={tag} className="px-4 py-1.5 rounded-full bg-white/20 dark:bg-[var(--color-brand-dark)]/40 backdrop-blur text-xs md:text-sm tracking-wide text-white dark:text-[var(--color-brand-light)] border border-white/40 dark:border-[var(--color-brand-light)]/40 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] dark:drop-shadow-none">
                 {tag}
               </span>

@@ -1,19 +1,127 @@
-import React from 'react';
+'use client'
+
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useSiteSettingValue } from '@/hooks';
+import { VideoModal } from '@/components/ui/VideoModal';
 
 interface CategoryStripProps { id: string; title: string; }
 
+interface ProjectItem {
+  id: string;
+  title?: string;
+  category?: string;
+  thumbnail: string;
+  videoUrl?: string;
+}
+
 export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
+  const [selectedVideo, setSelectedVideo] = useState<{ url: string, title: string } | null>(null);
+  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+
+  // Fetch projects based on section id
+  const settingKey = id === 'motion-graphics' ? 'motion_graphics_projects' : 'animations_projects';
+  const projectsData = useSiteSettingValue<{ projects: ProjectItem[] }>(settingKey, { projects: [] });
+
   // Reuse the exact same card style as "Our Works" section
-  const cardCls = 'relative overflow-hidden rounded-[2rem] aspect-[9/16] bg-[var(--color-bg-muted)] flex items-center justify-center shadow-card';
+  const cardCls = 'relative overflow-hidden rounded-[2rem] aspect-[9/16] bg-[var(--color-bg-muted)] flex items-center justify-center shadow-card hover:shadow-glow-green hover:scale-105 transition-all cursor-pointer group';
 
   // Align placeholders: Motion Graphics -> left, Animations -> right
   const showMediaRight = id === 'animations';
   const showMediaLeft = id === 'motion-graphics';
 
+  // Get YouTube video ID from URL
+  const getYouTubeVideoId = (url: string) => {
+    try {
+      if (url.includes('youtube.com/watch')) {
+        const urlObj = new URL(url);
+        return urlObj.searchParams.get('v');
+      } else if (url.includes('youtu.be/')) {
+        return url.split('youtu.be/')[1]?.split('?')[0];
+      }
+    } catch (e) {
+      console.error('Error parsing YouTube URL:', e);
+    }
+    return null;
+  };
+
+  // Get YouTube thumbnail URL
+  const getYouTubeThumbnail = (url: string) => {
+    const videoId = getYouTubeVideoId(url);
+    return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
+  };
+
+  // Get YouTube embed URL for hover preview
+  const getYouTubeEmbedUrl = (url: string) => {
+    const videoId = getYouTubeVideoId(url);
+    return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}` : null;
+  };
+
+  const handleProjectClick = (project: ProjectItem) => {
+    if (project.videoUrl) {
+      setSelectedVideo({
+        url: project.videoUrl,
+        title: project.title || 'Project Video'
+      });
+    }
+  };
+
+  const renderProjectCard = (w: ProjectItem) => {
+    const thumbnailUrl = w.videoUrl ? getYouTubeThumbnail(w.videoUrl) : w.thumbnail;
+    const embedUrl = w.videoUrl ? getYouTubeEmbedUrl(w.videoUrl) : null;
+    const isHovered = hoveredVideo === w.id;
+
+    return (
+      <div
+        key={w.id}
+        className={cardCls}
+        onClick={() => handleProjectClick(w)}
+        onMouseEnter={() => setHoveredVideo(w.id)}
+        onMouseLeave={() => setHoveredVideo(null)}
+        role="button"
+        tabIndex={0}
+        aria-label={`View ${w.title || 'project'}`}
+      >
+        <div className="relative w-full h-full">
+          {/* Show video on hover, thumbnail otherwise */}
+          {isHovered && embedUrl ? (
+            <iframe
+              src={embedUrl}
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+              allow="autoplay; encrypted-media"
+              frameBorder="0"
+            />
+          ) : thumbnailUrl ? (
+            <Image
+              src={thumbnailUrl}
+              alt={w.title || 'Project'}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <span className="text-[var(--color-text-muted)]">IMG</span>
+          )}
+
+          {/* Subtle overlay on hover */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300" />
+
+          {/* Title overlay at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+            {w.title && <p className="text-sm font-bold text-white line-clamp-1">{w.title}</p>}
+            {w.category && (
+              <span className="text-xs text-white/80">
+                {w.category}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const MediaRow: React.FC = () => (
     <div className="grid grid-cols-2 gap-6 w-full">
-      <div className={cardCls}>IMG</div>
-      <div className={cardCls}>IMG</div>
+      {projectsData.projects.map(project => renderProjectCard(project))}
     </div>
   );
   const getContent = () => {
@@ -86,6 +194,14 @@ export const CategoryStrip: React.FC<CategoryStripProps> = ({ id, title }) => {
           </div>
         )}
       </div>
+
+      {/* Video Modal */}
+      <VideoModal
+        isOpen={selectedVideo !== null}
+        onClose={() => setSelectedVideo(null)}
+        videoUrl={selectedVideo?.url || ''}
+        title={selectedVideo?.title}
+      />
     </section>
   );
 };
