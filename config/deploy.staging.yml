@@ -1,0 +1,48 @@
+# Kamal deployment configuration for NBM Frontend - STAGING
+service: nbm-frontend
+image: desinghrajan/nbm-frontend
+
+# Servers
+servers:
+  web:
+    hosts:
+      - 13.126.26.123
+    options:
+      memory: 300m
+      memory-swap: 400m
+    labels:
+      traefik.http.routers.nbm-frontend-staging.rule: Host(`nbm.desinghrajan.in`)
+      traefik.http.routers.nbm-frontend-staging.entrypoints: websecure
+      traefik.http.routers.nbm-frontend-staging.tls: true
+      traefik.http.routers.nbm-frontend-staging.tls.certresolver: letsencrypt
+
+# Registry
+registry:
+  username: desinghrajan
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Proxy
+proxy:
+  ssl: true
+  host: nbm.desinghrajan.in
+  app_port: 3000
+  healthcheck:
+    path: /up
+    timeout: 120
+    interval: 10
+
+# Environment
+env:
+  clear:
+    NODE_ENV: production
+
+# SSH
+ssh:
+  user: ubuntu
+
+# Builder
+builder:
+  arch: amd64
+  args:
+    NEXT_PUBLIC_API_URL: https://nbm.desinghrajan.in/nbm-be/api
